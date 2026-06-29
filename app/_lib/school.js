@@ -1,24 +1,24 @@
 import axios from "axios";
-import { headers } from "next/headers";
+
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKENDURL;
 
 export const getSchoolProfile = async () => {
     // for principal to access only
-      try {
+    try {
         const token = localStorage.getItem("token");
         if (!token) return;
         const res = await axios.get(`${backendUrl}/api/v1/school/config`, {
-            headers:{
+            headers: {
                 Authorization: `Bearer ${token}`
             }
         });
         return res.data;
-      } catch (error) {
+    } catch (error) {
         throw new Error(
-      error.response?.data?.detail || "Something went wrong"
-    );
-      }
+            error.response?.data?.detail || "Something went wrong"
+        );
+    }
 }
 
 export const updateSchoolProfile = async (name, address, motto, phone, email) => {
@@ -36,8 +36,8 @@ export const updateSchoolProfile = async (name, address, motto, phone, email) =>
         return res.data;
     } catch (error) {
         throw new Error(
-      error.response?.data?.detail || "Something went wrong"
-    );
+            error.response?.data?.detail || "Something went wrong"
+        );
     }
 }
 
@@ -46,22 +46,22 @@ export const getScoreComponentMaximums = async (params) => {
         const token = localStorage.getItem("token");
         if (!token) return;
         const res = await axios.get(`${backendUrl}/api/v1/school/score-config`, {
-            headers:{
+            headers: {
                 Authorization: `Bearer ${token}`
             }
         });
         return res.data
     } catch (error) {
         throw new Error(
-      error.response?.data?.detail || "Something went wrong"
-    );
+            error.response?.data?.detail || "Something went wrong"
+        );
     }
 }
 
 export const updateScoreMaximums = async (ca1_max, ca2_max, exam_max) => {
     try {
         // principal only
-         const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
         if (!token) return;
         const res = await axios.put(`${backendUrl}/api/v1/school/score-config`, {
             ca1_max, ca2_max, exam_max
@@ -73,8 +73,8 @@ export const updateScoreMaximums = async (ca1_max, ca2_max, exam_max) => {
         return res.data;
     } catch (error) {
         throw new Error(
-      error.response?.data?.detail || "Something went wrong"
-    );  
+            error.response?.data?.detail || "Something went wrong"
+        );
     }
 }
 
@@ -90,8 +90,8 @@ export const getGradingScheme = async () => {
         return res.data;
     } catch (error) {
         throw new Error(
-      error.response?.data?.detail || "Something went wrong"
-    );  
+            error.response?.data?.detail || "Something went wrong"
+        );
     }
 }
 
@@ -141,9 +141,9 @@ export const listAllAcademicSessions = async () => {
 export const createAcademicSession = async (name, year) => {
     // principal only
     try {
-       const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.post(`${backendUrl}/api/v1/school/sessions`, {name, year}, {
+        const res = await axios.post(`${backendUrl}/api/v1/school/sessions`, { name, year }, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -161,8 +161,8 @@ export const setSessionAsCurrent = async (session_id) => {
         // principal only
         const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.patch(`${backendUrl}/api/v1/school/sessions/${session_id}/terms`, {}, {
-            headers:{
+        const res = await axios.put(`${backendUrl}/api/v1/school/sessions/${session_id}/terms`, {}, {
+            headers: {
                 Authorization: `Bearer ${token}`
             }
         });
@@ -196,7 +196,7 @@ export const createTerm = async (session_id, term_number, name, start_date, end_
     try {
         const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.post(`${backendUrl}/api/v1/school/terms`, {session_id, term_number, name, start_date, end_date }, {
+        const res = await axios.post(`${backendUrl}/api/v1/school/terms`, { session_id, term_number, name, start_date, end_date }, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -210,21 +210,21 @@ export const createTerm = async (session_id, term_number, name, start_date, end_
 }
 
 export const setTermAsCurrent = async (term_id) => {
-   try {
-    // principal only
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      const res = await axios.patch(`${backendUrl}/api/v1/school/terms/${term_id}/set-current`, {
+    try {
+        // principal only
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        const res = await axios.patch(`${backendUrl}/api/v1/school/terms/${term_id}/set-current`, {
 
-      }, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-      });
-      return res.data;
-   } catch (error) {
-       throw new Error(
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw new Error(
             error.response?.data?.detail || "Something went wrong"
         );
-   }   
+    }
 }

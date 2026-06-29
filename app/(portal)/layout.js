@@ -12,14 +12,7 @@ import {
   LuBuilding2,
   LuChevronDown,
 } from "react-icons/lu";
-
-// ---- Demo data only — replace with useAuth() once logic phase starts ----
-const demoUser = {
-  firstName: "Ofem",
-  lastName: "Esekpa",
-  role: "principal",
-  initials: "OE",
-};
+import { useAuth } from "../_lib/AuthContext";
 
 // Real PortalX routes, grouped the way they'll actually be gated by role later.
 // `roles` is kept on each link for when filtering logic gets wired in — not applied yet.
@@ -51,6 +44,11 @@ const navGroups = [
 
 function Sidenav() {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  const initials = user
+    ? `${user.first_name?.[0] ?? ""}${user.last_name?.[0] ?? ""}`.toUpperCase()
+    : "";
 
   return (
     <aside className="fixed left-0 top-0 h-full w-[248px] bg-[#1C2630] text-[#FAF8F4] flex flex-col py-7 px-6 z-50">
@@ -91,14 +89,14 @@ function Sidenav() {
 
       <div className="flex items-center gap-2.5 pt-5 border-t border-[#2C3744]">
         <div className="w-[34px] h-[34px] rounded-full bg-[#9C7A3C] text-[#1C2630] flex items-center justify-center font-serif font-semibold text-sm shrink-0">
-          {demoUser.initials}
+          {initials}
         </div>
         <div className="min-w-0">
           <div className="text-[13px] text-[#EDEAE3] truncate">
-            {demoUser.firstName} {demoUser.lastName}
+            {user?.first_name} {user?.last_name}
           </div>
           <div className="text-[11px] uppercase tracking-[0.05em] text-[#8C97A1]">
-            {demoUser.role.replace("_", " ")}
+            {user?.role?.replace("_", " ")}
           </div>
         </div>
         <LuChevronDown size={18} className="ml-auto shrink-0 text-[#8C97A1] cursor-pointer" />
