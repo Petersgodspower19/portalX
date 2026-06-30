@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const backendUrl = process.env.NEXT_PUBLIC_BACKENDURL;
 
 export const listClasses = async (level) => {
