@@ -2,14 +2,17 @@ import axios from "axios";
 const backendUrl = process.env.NEXT_PUBLIC_BACKENDURL;
 
 
-export const listStudents = async (class_id, active_only) => {
+export const listStudents = async (class_id, active_only, search, sort_by, sort_order) => {
     try {
         const token = localStorage.getItem("token");
         if (!token) return;
         const res = await axios.get(`${backendUrl}/api/v1/students`, {
             params: {
                 class_id,
-                active_only
+                active_only,
+                search,
+                sort_by,
+                sort_order
             },
             headers: {
                 Authorization: `Bearer ${token}`

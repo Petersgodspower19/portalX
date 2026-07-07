@@ -20,6 +20,24 @@ export const listClasses = async (level) => {
     }
 }
 
+export const getMyClass = async () => {
+  // for logged in class teacher to get thier class details 
+   try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      const res = await axios.get(`${backendUrl}/api/v1/classes/my-class`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return res.data;
+   } catch (error) {
+      throw new Error(
+            error.response?.data?.detail || "Something went wrong"
+        );
+   }
+}
+
 export const createClass = async (name, arm, level, form_teacher_id) => {
     // principal and vice principal only
     try {
@@ -117,6 +135,7 @@ export const getAssignedSubjects = async (class_id, term_id) => {
       if (!token) return;
       const res = await axios.get(`${backendUrl}/api/v1/classes/${class_id}/subjects`, {
         params: {
+            class_id,
             term_id
         },
         headers: {

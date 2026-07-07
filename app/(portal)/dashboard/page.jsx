@@ -1,5 +1,6 @@
 "use client";
 import { LuArrowRight } from "react-icons/lu";
+import { useGetSession, useGetTerm } from "../../_lib/hooks";
 
 const stats = [
   { label: "Results awaiting approval", value: "7", flag: "3 classes pending", tone: "amber" },
@@ -35,21 +36,31 @@ const flagStyles = {
 };
 
 function feeTone(pct) {
-  return pct >= 70
-    ? "bg-[#EAEFE6] text-[#5E7A5E]"
-    : "bg-[#F3E7E3] text-[#8B4A3D]";
+  return pct >= 70 ? "bg-[#EAEFE6] text-[#5E7A5E]" : "bg-[#F3E7E3] text-[#8B4A3D]";
 }
 
 export default function DashboardPage() {
+  const { data: session } = useGetSession();
+  const { data: term } = useGetTerm();
+
+  const sessionLabel = session?.name ?? "—";
+  const termLabel = term?.name ?? "—";
+  const termPill = session && term
+    ? `${sessionLabel} — ${termLabel}`
+    : "Loading…";
+  const pageSubtitle = term && session
+    ? `${termLabel} · ${sessionLabel}`
+    : "Loading current term…";
+
   return (
     <div>
       <div className="flex justify-between items-end mb-1.5">
         <div>
           <h1 className="font-serif text-[27px] font-medium">Dashboard</h1>
-          <p className="text-[12.5px] text-[#5C7080] mt-1">First Term · 2024/2025 session</p>
+          <p className="text-[12.5px] text-[#5C7080] mt-1">{pageSubtitle}</p>
         </div>
-        <div className="font-mono text-[12px] text-[#5C7080] border border-[#DCD5C7] rounded-[3px] px-3 py-1.5 bg-white">
-          SESSION 2024/2025 — TERM 1
+        <div className="font-mono text-[12px] text-[#5C7080] border border-[#DCD5C7] rounded-[3px] px-3 py-1.5 bg-white uppercase tracking-wide">
+          {termPill}
         </div>
       </div>
 
@@ -83,9 +94,7 @@ export default function DashboardPage() {
               {["Class", "Subject", "Submitted by", "Students", "Submitted", ""].map((h, i) => (
                 <th
                   key={h + i}
-                  className={`text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7] ${
-                    i === 3 ? "text-right" : ""
-                  }`}
+                  className={`text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7] ${i === 3 ? "text-right" : ""}`}
                 >
                   {h}
                 </th>
@@ -128,9 +137,7 @@ export default function DashboardPage() {
                 {["Class", "Students", "Paid", "Status"].map((h, i) => (
                   <th
                     key={h}
-                    className={`text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7] ${
-                      i === 1 || i === 2 ? "text-right" : ""
-                    }`}
+                    className={`text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7] ${i === 1 || i === 2 ? "text-right" : ""}`}
                   >
                     {h}
                   </th>

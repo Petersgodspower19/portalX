@@ -156,12 +156,30 @@ export const createAcademicSession = async (name, year) => {
     }
 }
 
+export const getCurrentAcademicSession = async () => {
+    try {
+       const token = localStorage.getItem("token");
+        if (!token) return; 
+        const res = await axios.get(`${backendUrl}/api/v1/school/sessions/current`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        throw new Error(
+            error.response?.data?.detail || "Something went wrong"
+        );
+    }
+}
+
 export const setSessionAsCurrent = async (session_id) => {
     try {
         // principal only
         const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.put(`${backendUrl}/api/v1/school/sessions/${session_id}/terms`, {}, {
+        const res = await axios.post(`${backendUrl}/api/v1/school/sessions/${session_id}/set-current`, {}, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -179,6 +197,23 @@ export const listTermsForSession = async (session_id) => {
         const token = localStorage.getItem("token");
         if (!token) return;
         const res = await axios.get(`${backendUrl}/api/v1/school/sessions/${session_id}/terms`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw new Error(
+            error.response?.data?.detail || "Something went wrong"
+        );
+    }
+}
+
+export const getCurrentTerm = async () => {
+    try {
+       const token = localStorage.getItem("token");
+        if (!token) return;
+        const res = await axios.get(`${backendUrl}/api/v1/school/terms/current`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

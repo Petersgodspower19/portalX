@@ -83,7 +83,7 @@ function ClassesPageContent() {
           listAllStaff(),
         ]);
 
-        console.log(subjectsData);
+        // console.log(subjectsData);
 
         setClasses(classesData || []);
         setSubjects(subjectsData || []);
@@ -121,7 +121,8 @@ function ClassesPageContent() {
     setEditingTeacherId(cls.form_teacher_id || "");
     setIsLoadingClassDetails(true);
     try {
-      const data = await getAssignedSubjects(cls.id);
+      const data = await getAssignedSubjects(cls.id, activeTermId);
+      console.log(data);
       setClassSubjects(data || []);
     } catch (err) {
       toast.error(err.message || "Could not fetch assigned subjects.");
@@ -234,7 +235,7 @@ function ClassesPageContent() {
       toast.success("Subject assigned to class.");
       
       // Reload class subjects
-      const updatedSubjects = await getAssignedSubjects(selectedClass.id);
+      const updatedSubjects = await getAssignedSubjects(selectedClass.id, activeTermId);
       setClassSubjects(updatedSubjects || []);
       
       setShowAssignSubjectModal(false);
