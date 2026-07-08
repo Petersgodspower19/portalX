@@ -1,6 +1,7 @@
 "use client";
 import { LuArrowRight } from "react-icons/lu";
 import { useGetSession, useGetTerm, useStudents, useStaff, useInvoices } from "../../_lib/hooks";
+import ProtectedRoute from "@/app/_lib/ProtectedRoutes";
 
 // Still demo — results API not integrated yet
 const pendingResults = [
@@ -34,7 +35,7 @@ function feeTone(pct) {
   return pct >= 70 ? "bg-[#EAEFE6] text-[#5E7A5E]" : "bg-[#F3E7E3] text-[#8B4A3D]";
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const { data: session } = useGetSession();
   const { data: term } = useGetTerm();
 
@@ -226,5 +227,14 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+
+export default function DashboardPage() {
+  return (
+    <ProtectedRoute allowedRoles={["principal", "vice_principal", "bursar"]}>
+      <DashboardContent />
+    </ProtectedRoute>
   );
 }

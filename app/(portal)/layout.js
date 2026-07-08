@@ -12,6 +12,7 @@ import {
   LuBuilding2,
   LuChevronDown,
 } from "react-icons/lu";
+import { PiStudentBold } from "react-icons/pi";
 import { useAuth } from "../_lib/AuthContext";
 
 // Real PortalX routes, grouped the way they'll actually be gated by role later.
@@ -20,7 +21,8 @@ const navGroups = [
   {
     label: "Overview",
     links: [
-      { title: "Dashboard", route: "/dashboard", icon: LuLayoutDashboard, roles: ["principal", "vice_principal", "form_teacher", "bursar"] },
+      { title: "Dashboard", route: "/dashboard", icon: LuLayoutDashboard, roles: ["principal", "vice_principal"] },
+      { title: "Student Profile", route: "/student-profile", icon: PiStudentBold, roles: ["student"] },
       { title: "Audit log", route: "/audit", icon: LuScrollText, roles: ["principal", "vice_principal"] },
     ],
   },

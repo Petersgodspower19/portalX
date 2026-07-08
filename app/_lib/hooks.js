@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentTerm, getCurrentAcademicSession } from "./school";
 import { listStudents, getStudent } from "./students";
-import { getMyClass, getAssignedSubjects } from "./classes";
+import { getMyClass, getAssignedSubjects, listClasses } from "./classes";
 import { listFeeTypes, getInvoices, studentInvoice, getStudentFeesStatusForTerm } from "./fees";
 import { listAllStaff } from "./staff";
 import { getAllPendingResults, getResultsForClass, getStudentResults } from "./results";
@@ -49,6 +49,16 @@ export const useStudent = (student_id) => {
         enabled: !!student_id,
     });
 };
+
+export const useClasses = (level) => {
+    return useQuery({
+        queryKey: ["classes", level],
+        queryFn: () => listClasses(level),
+        staleTime: 1000 * 60 * 5,
+        retry: false,
+    });
+};
+
 
 export const useGetTeachersClass = () => {
     return useQuery({

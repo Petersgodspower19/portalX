@@ -3,7 +3,7 @@ export const roleRoutes = {
   vice_principal: ["/dashboard", "/students", "/classes", "/results", "/fees", "/staff"], // read-only inside these
   form_teacher: ["/my-class", "/results"],
   bursar: ["/fees"],
-  student: ["/my-results", "/my-fees"],
+  student: ["student-profile", "/my-fees"],
 };
 
 // First route in each role's list = where they land after login

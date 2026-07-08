@@ -46,6 +46,7 @@ export const enrollStudent = async (first_name, last_name, gender, date_of_birth
                 Authorization: `Bearer ${token}`
             }
         });
+        console.log(res.data);
         return res.data;
     } catch (error) {
         throw new Error(

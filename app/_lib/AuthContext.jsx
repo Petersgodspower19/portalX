@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getDefaultRoute } from "../_lib/permissions";
 import { getCurrentUserProfile } from "../_lib/auth";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext(undefined);
 
@@ -48,7 +49,8 @@ export const AuthProvider = ({ children }) => {
     }
 
     setUser(fullUser);
-    if (fullUser.must_change_password) {
+    toast.success(`Login successful, Welcome, ${fullUser.first_name}!`);
+    if (fullUser.must_change_password) {  
       router.push("/change-password");
     } else {
       router.push(getDefaultRoute(fullUser.role));
