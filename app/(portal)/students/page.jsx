@@ -32,6 +32,7 @@ function StudentsContent() {
 
   const activeFilters = { ...filters, search: debouncedSearch };
   const { data: students = [], isLoading } = useStudents(activeFilters);
+  console.log(students);
 
   const handleSearchChange = (val) => {
     setFilters((f) => ({ ...f, search: val }));
@@ -176,7 +177,7 @@ function StudentsContent() {
                 <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">
                   {s.reg_number ?? "—"}
                 </td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[13px]">{s.class_name ?? s.class_id ?? "—"}</td>
+                <td className="py-3 border-b border-[#DCD5C7] text-[13px]">{s.class_info?.full_name ?? s.class_id ?? "—"}</td>
                 <td className="py-3 border-b border-[#DCD5C7] text-[13px] capitalize">{s.gender ?? "—"}</td>
                 <td className="py-3 border-b border-[#DCD5C7]">
                   <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 ${

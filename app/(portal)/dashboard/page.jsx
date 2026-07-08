@@ -1,20 +1,15 @@
 "use client";
 import { LuArrowRight } from "react-icons/lu";
-import { useGetSession, useGetTerm } from "../../_lib/hooks";
+import { useGetSession, useGetTerm, useStudents, useStaff, useInvoices } from "../../_lib/hooks";
 
-const stats = [
-  { label: "Results awaiting approval", value: "7", flag: "3 classes pending", tone: "amber" },
-  { label: "Unpaid invoices", value: "112", unit: "of 480", flag: "₦5.6m outstanding", tone: "rust" },
-  { label: "Enrolled students", value: "480", flag: "across 16 classes", tone: "quiet" },
-  { label: "Active staff", value: "34", flag: "1 awaiting first login", tone: "quiet" },
-];
-
+// Still demo — results API not integrated yet
 const pendingResults = [
   { class: "JSS1A", subject: "Mathematics", by: "Mrs Adeyemi", students: 28, submitted: "2 days ago" },
   { class: "SSS2B", subject: "English Language", by: "Mr Okonkwo", students: 31, submitted: "2 days ago" },
   { class: "JSS3A", subject: "Basic Science", by: "Mrs Bello", students: 26, submitted: "Yesterday" },
 ];
 
+// Still demo — invoice breakdown by class not available at this level yet
 const feeStatus = [
   { class: "JSS1A", students: 28, paid: 24, pct: 86 },
   { class: "JSS2B", students: 30, paid: 14, pct: 47 },
@@ -43,14 +38,60 @@ export default function DashboardPage() {
   const { data: session } = useGetSession();
   const { data: term } = useGetTerm();
 
+  // ── Real data ──────────────────────────────────────────────────────
+  const { data: students = [], isLoading: studentsLoading } = useStudents({
+    sort_by: "created_at",
+    sort_order: "desc",
+  });
+  const { data: staff = [], isLoading: staffLoading } = useStaff();
+  const { data: unpaidInvoices = [], isLoading: unpaidLoading } = useInvoices({
+    term_id: term?.id,
+    status: "unpaid",
+  });
+  const { data: allInvoices = [], isLoading: allInvoicesLoading } = useInvoices({
+    term_id: term?.id,
+  });
+
+  const activeStaff = staff.filter((s) => s.is_active !== false);
+  const awaitingFirstLogin = staff.filter((s) => s.is_active !== false && !s.has_logged_in).length;
+
+  // ── Stats ──────────────────────────────────────────────────────────
+  const stats = [
+    {
+      label: "Results awaiting approval",
+      value: "—",
+      flag: "pending",
+      tone: "amber",
+      loading: false,
+    },
+    {
+      label: "Unpaid invoices",
+      value: unpaidInvoices.length,
+      unit: allInvoices.length ? `of ${allInvoices.length}` : undefined,
+      flag: "this term",
+      tone: "rust",
+      loading: unpaidLoading || allInvoicesLoading,
+    },
+    {
+      label: "Enrolled students",
+      value: students.length,
+      flag: "across all classes",
+      tone: "quiet",
+      loading: studentsLoading,
+    },
+    {
+      label: "Active staff",
+      value: activeStaff.length,
+      flag: awaitingFirstLogin > 0 ? `${awaitingFirstLogin} awaiting first login` : "all logged in",
+      tone: "quiet",
+      loading: staffLoading,
+    },
+  ];
+
   const sessionLabel = session?.name ?? "—";
   const termLabel = term?.name ?? "—";
-  const termPill = session && term
-    ? `${sessionLabel} — ${termLabel}`
-    : "Loading…";
-  const pageSubtitle = term && session
-    ? `${termLabel} · ${sessionLabel}`
-    : "Loading current term…";
+  const termPill = session && term ? `${sessionLabel} — ${termLabel}` : "Loading…";
+  const pageSubtitle = term && session ? `${termLabel} · ${sessionLabel}` : "Loading current term…";
 
   return (
     <div>
@@ -70,13 +111,22 @@ export default function DashboardPage() {
         {stats.map((s, i) => (
           <div key={s.label} className={`px-6 ${i !== 0 ? "border-l border-[#DCD5C7]" : "pl-0"}`}>
             <div className="text-[11px] uppercase tracking-[0.07em] text-[#5C7080] mb-2.5">{s.label}</div>
-            <div className="font-serif text-[32px] font-medium">
-              {s.value}
-              {s.unit && <span className="font-sans text-[15px] text-[#5C7080] ml-1">{s.unit}</span>}
-            </div>
-            <span className={`inline-block mt-2 text-[11.5px] rounded-[3px] px-1.5 py-0.5 ${flagStyles[s.tone]}`}>
-              {s.flag}
-            </span>
+            {s.loading ? (
+              <div className="space-y-2 mt-1">
+                <div className="h-9 w-20 bg-[#E8E3DA] rounded-[3px] animate-pulse" />
+                <div className="h-4 w-28 bg-[#E8E3DA] rounded-[3px] animate-pulse" />
+              </div>
+            ) : (
+              <>
+                <div className="font-serif text-[32px] font-medium">
+                  {s.value}
+                  {s.unit && <span className="font-sans text-[15px] text-[#5C7080] ml-1">{s.unit}</span>}
+                </div>
+                <span className={`inline-block mt-2 text-[11.5px] rounded-[3px] px-1.5 py-0.5 ${flagStyles[s.tone]}`}>
+                  {s.flag}
+                </span>
+              </>
+            )}
           </div>
         ))}
       </div>
@@ -110,12 +160,8 @@ export default function DashboardPage() {
                 <td className="py-3.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080] text-right">{r.students}</td>
                 <td className="py-3.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">{r.submitted}</td>
                 <td className="py-3.5 border-b border-[#DCD5C7] text-right">
-                  <button className="text-[12px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-3 py-1.5">
-                    Review
-                  </button>
-                  <button className="text-[12px] font-medium bg-[#1C2630] text-[#FAF8F4] rounded-[3px] px-3 py-1.5 ml-2">
-                    Approve
-                  </button>
+                  <button className="text-[12px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-3 py-1.5">Review</button>
+                  <button className="text-[12px] font-medium bg-[#1C2630] text-[#FAF8F4] rounded-[3px] px-3 py-1.5 ml-2">Approve</button>
                 </td>
               </tr>
             ))}

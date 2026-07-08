@@ -98,7 +98,7 @@ function StudentDetailContent() {
           <Row label="Last name" value={student.last_name} />
           <Row label="Gender" value={student.gender} capitalize />
           <Row label="Date of birth" value={student.date_of_birth} mono />
-          <Row label="Class" value={student.class_name ?? student.class_id ?? "—"} />
+          <Row label="Class" value={student.class_info?.full_name ?? student.class_id ?? "—"} />
           <Row label="Registration no." value={student.reg_number} mono />
         </Section>
 
