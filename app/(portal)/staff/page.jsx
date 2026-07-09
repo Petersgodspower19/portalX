@@ -40,7 +40,7 @@ function StaffContent() {
     const load = async () => {
       try {
         const data = await listAllStaff();
-        console.log(data);
+        // console.log(data);
         const list = sortNewestFirst(data?.users ?? data ?? []);
         staffCache = list;
         setStaff(list);

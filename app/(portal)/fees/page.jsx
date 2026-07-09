@@ -8,7 +8,7 @@ import {
   createInvoices, markInvoiceAsPaid, markInvoiceAsUnPaid,
   grantFeeOverride, removeFeeOverride,
 } from "../../_lib/fees";
-import { useFeeTypes, useInvoices, useGetTerm, useAuth } from "../../_lib/hooks";
+import { useFeeTypes, useInvoices, useGetTerm, useAuth, useClasses } from "../../_lib/hooks";
 import ProtectedRoute from "../../_lib/ProtectedRoutes";
 import { useAuth as useAuthCtx } from "../../_lib/AuthContext";
 
@@ -58,6 +58,7 @@ function FeesContent() {
 function InvoicesTab({ isPrincipal }) {
   const queryClient = useQueryClient();
   const { data: term } = useGetTerm();
+  const { data: classes = [], isLoading: loadingClasses } = useClasses();
   const termId = term?.id;
 
   const [classId, setClassId] = useState("");
@@ -72,6 +73,7 @@ function InvoicesTab({ isPrincipal }) {
     class_id: classId || undefined,
     status: status || undefined,
   });
+  
 
   const handleMarkPaid = async (invoiceId, note) => {
     try {
@@ -145,12 +147,30 @@ function InvoicesTab({ isPrincipal }) {
 
       {/* Filters + generate button */}
       <div className="flex gap-3 mb-5 items-center flex-wrap">
-        <input
-          value={classId}
-          onChange={(e) => setClassId(e.target.value)}
-          placeholder="Filter by class ID"
-          className="text-[13px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 bg-white outline-none w-40"
-        />
+        <>
+       
+           <div className="mb-6 max-w-[320px]">
+  <label className="block text-[12px] text-[#5C7080] mb-1.5">
+    Select Class
+  </label>
+
+  <select
+    value={classId}
+    onChange={(e) => setClassId(e.target.value)}
+    className="w-full text-[11.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+  >
+    <option value="">
+      {loadingClasses ? "Loading classes..." : "Select a class"}
+    </option>
+
+    {classes.map((cls) => (
+      <option key={cls.id} value={cls.id}>
+        {cls.full_name}
+      </option>
+    ))}
+  </select>
+</div>
+        </>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
@@ -179,7 +199,7 @@ function InvoicesTab({ isPrincipal }) {
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              {["Student", "Class", "Amount", "Status", ""].map((h) => (
+              {["Student", "Reg No.", "Amount", "Status", ""].map((h) => (
                 <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
                   {h}
                 </th>
@@ -193,7 +213,7 @@ function InvoicesTab({ isPrincipal }) {
                   {inv.student_name ?? `${inv.first_name ?? ""} ${inv.last_name ?? ""}`.trim()}
                 </td>
                 <td className="py-3 border-b border-[#DCD5C7] text-[13px] text-[#5C7080]">
-                  {inv.class_name ?? inv.class_id ?? "—"}
+                  {inv.reg_number ?? inv.class_id ?? "—"}
                 </td>
                 <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">
                   ₦{Number(inv.amount ?? 0).toLocaleString()}
@@ -389,14 +409,25 @@ function FeeTypesTab({ isPrincipal }) {
 /* ─── Modals ────────────────────────────────────────────────────────────── */
 
 function GenerateModal({ termId, onClose, onGenerated }) {
-  const [classId, setClassId] = useState("");
+  const { data: classes = [], isLoading: loadingClasses } = useClasses();
+ const [form, setForm] = useState({
+  class_id: "",
+  is_per_student: false,
+  term_id: termId,
+});
+
+const set = (field) => (e) =>
+  setForm((prev) => ({
+    ...prev,
+    [field]: e.target.value,
+  }));
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSaving(true);
     try {
-      await createInvoices(termId, classId || undefined);
+      await createInvoices(termId, form.class_id || undefined);
       onGenerated();
     } catch (err) {
       toast.error(err.message || "Could not generate invoices.");
@@ -413,12 +444,21 @@ function GenerateModal({ termId, onClose, onGenerated }) {
       <form onSubmit={handleSubmit}>
         <div className="mb-5">
           <label className="block text-[12px] text-[#5C7080] mb-1.5">Class ID (optional)</label>
-          <input
-            value={classId}
-            onChange={(e) => setClassId(e.target.value)}
-            placeholder="Leave blank for all classes"
-            className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
-          />
+           <select
+  value={form.class_id}
+  onChange={set("class_id")}
+    className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+  >
+    <option value="">
+      {loadingClasses ? "Loading classes..." : "Select a class"}
+    </option>
+
+    {classes.map((cls) => (
+      <option key={cls.id} value={cls.id}>
+        {cls.full_name}
+      </option>
+    ))}
+  </select>
         </div>
         <button type="submit" disabled={isSaving} className="w-full bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60">
           {isSaving ? "Generating…" : "Generate"}

@@ -123,16 +123,26 @@ export const markInvoiceAsPaid = async (invoice_id, payment_note) => {
     try {
         const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.post(`${backendUrl}/api/v1/fees/invoices/${invoice_id}/pay`, {payment_note}, {
+        const body = payment_note?.trim() ? { payment_note } : {};
+        const res = await axios.post(`${backendUrl}/api/v1/fees/invoices/${invoice_id}/pay`, body, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
         return res.data;
     } catch (error) {
-        throw new Error(
-            error.response?.data?.detail || "Something went wrong"
-        ); 
+         const detail = error.response?.data?.detail;
+
+    let message = "Something went wrong";
+
+    if (Array.isArray(detail)) {
+        message = detail.map(err => err.msg).join(", ");
+    } else if (typeof detail === "string") {
+        message = detail;
+    }
+
+    throw new Error(message);
+       
     }
 }
 
@@ -202,7 +212,8 @@ export const getStudentFeesStatusForTerm = async (student_id, term_id) => {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        })
+        });
+        return res.data;
     } catch (error) {
         throw new Error(
             error.response?.data?.detail || "Something went wrong"

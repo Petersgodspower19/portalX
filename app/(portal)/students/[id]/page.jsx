@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { LuArrowLeft, LuArrowRightLeft, LuUserX } from "react-icons/lu";
-import { useStudent } from "@/app/_lib/hooks";
+import { useGetTerm, useStudent, useStudentFeeStatus } from "@/app/_lib/hooks";
 import { deactivateStudent, transferStudentToAnotherClass } from "@/app/_lib/students";
 import ProtectedRoute from "@/app/_lib/ProtectedRoutes";
 
@@ -13,7 +13,11 @@ function StudentDetailContent() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: student, isLoading, isError } = useStudent(id);
-
+  const {
+  data: term,
+  isLoading: termLoading,
+} = useGetTerm();
+  const {data: feeStatus, isLoadingStatus} = useStudentFeeStatus(student?.id, term?.id);
   const [showTransfer, setShowTransfer] = useState(false);
 
   const handleDeactivate = async () => {
@@ -92,22 +96,93 @@ function StudentDetailContent() {
       <div className="border-b border-[#DCD5C7] mb-7" />
 
       {/* ── Details grid ── */}
-      <div className="grid grid-cols-[1fr_1fr] gap-6 max-w-[760px]">
-        <Section title="Student details">
-          <Row label="First name" value={student.first_name} />
-          <Row label="Last name" value={student.last_name} />
-          <Row label="Gender" value={student.gender} capitalize />
-          <Row label="Date of birth" value={student.date_of_birth} mono />
-          <Row label="Class" value={student.class_info?.full_name ?? student.class_id ?? "—"} />
-          <Row label="Registration no." value={student.reg_number} mono />
-        </Section>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <Section title="Student details">
+    <Row label="First name" value={student.first_name} />
+    <Row label="Last name" value={student.last_name} />
+    <Row label="Gender" value={student.gender} capitalize />
+    <Row label="Date of birth" value={student.date_of_birth} mono />
+    <Row
+      label="Class"
+      value={student.class_info?.full_name ?? student.class_id ?? "—"}
+    />
+    <Row label="Registration no." value={student.reg_number} mono />
+  </Section>
 
-        <Section title="Guardian details">
-          <Row label="Name" value={student.guardian_name ?? "—"} />
-          <Row label="Phone" value={student.guardian_phone ?? "—"} mono />
-          <Row label="Email" value={student.guardian_email ?? "—"} mono />
-        </Section>
-      </div>
+  <Section title="Guardian details">
+    <Row label="Name" value={student.guardian_name ?? "—"} />
+    <Row label="Phone" value={student.guardian_phone ?? "—"} mono />
+    <Row label="Email" value={student.guardian_email ?? "—"} mono />
+  </Section>
+
+  <Section title="Fees">
+    {isLoadingStatus ? (
+      <p className="text-[13px] text-[#8A98A3]">Loading fee status...</p>
+    ) : feeStatus ? (
+      <>
+        <Row
+          label="Status"
+          value={feeStatus.status}
+        />
+
+        <Row
+          label="Total Owed"
+          value={`₦${feeStatus.total_owed?.toLocaleString() ?? 0}`}
+        />
+
+        <Row
+          label="Total Paid"
+          value={`₦${feeStatus.total_paid?.toLocaleString() ?? 0}`}
+        />
+
+        <div className="mt-5 border-t border-[#E7E1D4] pt-4">
+          <p className="text-[11px] uppercase tracking-[0.07em] text-[#8A98A3] mb-3">
+            Invoices
+          </p>
+
+          {feeStatus.invoices?.length ? (
+            <div className="space-y-3">
+              {feeStatus.invoices.map((invoice) => (
+                <div
+                  key={invoice.id}
+                  className="border border-[#ECE6DA] rounded-[4px] p-3"
+                >
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="font-medium text-[13px]">
+                      {invoice.fee_type_name}
+                    </span>
+
+                    <span
+                      className={`text-[11px] px-2 py-0.5 rounded-full ${
+                        invoice.status === "paid"
+                          ? "bg-[#EAEFE6] text-[#5E7A5E]"
+                          : "bg-[#F3E7E3] text-[#8B4A3D]"
+                      }`}
+                    >
+                      {invoice.status}
+                    </span>
+                  </div>
+
+                  <div className="text-[12px] text-[#5C7080]">
+                    Amount: ₦{invoice.amount.toLocaleString()}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-[12px] text-[#8A98A3]">
+              No invoices found.
+            </p>
+          )}
+        </div>
+      </>
+    ) : (
+      <p className="text-[13px] text-[#8A98A3]">
+        No fee information available.
+      </p>
+    )}
+  </Section>
+</div>
 
       {/* ── Transfer modal ── */}
       {showTransfer && (

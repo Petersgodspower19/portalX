@@ -33,7 +33,7 @@ function StudentsContent() {
 
   const activeFilters = { ...filters, search: debouncedSearch };
   const { data: students = [], isLoading } = useStudents(activeFilters);
-  console.log(students);
+  // console.log(students);
 
   const handleSearchChange = (val) => {
     setFilters((f) => ({ ...f, search: val }));

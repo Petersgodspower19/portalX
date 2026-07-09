@@ -30,7 +30,7 @@ const navGroups = [
     label: "Academics",
     links: [
       { title: "Classes & subjects", route: "/classes", icon: LuGraduationCap, roles: ["principal", "vice_principal"] },
-      { title: "Results", route: "/results", icon: LuClipboardList, roles: ["principal", "vice_principal", "form_teacher"] },
+      { title: "Results", route: "/results", icon: LuClipboardList, roles: ["principal",  "form_teacher"] },
       { title: "Students", route: "/students", icon: LuUsers, roles: ["principal", "vice_principal"] },
       { title: "My Class", route: "/my-class", icon: LuGraduationCap, roles: ["form_teacher"] },
     ],

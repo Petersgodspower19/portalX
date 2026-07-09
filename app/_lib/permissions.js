@@ -1,6 +1,6 @@
 export const roleRoutes = {
   principal: ["/dashboard", "/students", "/classes", "/results", "/fees", "/staff", "/audit", "/school-profile"],
-  vice_principal: ["/dashboard", "/students", "/classes", "/results", "/fees", "/staff"], // read-only inside these
+  vice_principal: ["/dashboard", "/students", "/classes",  "/fees", "/staff"], // read-only inside these
   form_teacher: ["/my-class", "/results"],
   bursar: ["/fees"],
   student: ["student-profile", "/my-fees"],

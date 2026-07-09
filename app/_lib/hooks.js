@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentTerm, getCurrentAcademicSession } from "./school";
-import { listStudents, getStudent } from "./students";
+import { listStudents, getStudent, getCurrentLoggedInStudent } from "./students";
 import { getMyClass, getAssignedSubjects, listClasses } from "./classes";
 import { listFeeTypes, getInvoices, studentInvoice, getStudentFeesStatusForTerm } from "./fees";
 import { listAllStaff } from "./staff";
@@ -39,6 +39,16 @@ export const useStudents = (filters) => {
         select: (data) => data?.students ?? data ?? [],
     });
 };
+
+
+export const useLoggedInStudent = () => {
+    return useQuery({
+        queryKey: ["student"],
+        queryFn: () => getCurrentLoggedInStudent(),
+        staleTime: 1000 * 60 * 5,
+        retry: false,
+    });
+}
 
 export const useStudent = (student_id) => {
     return useQuery({

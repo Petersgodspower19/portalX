@@ -1,22 +1,6 @@
 "use client";
 import { LuArrowRight } from "react-icons/lu";
-import { useGetSession, useGetTerm, useStudents, useStaff, useInvoices } from "../../_lib/hooks";
-import ProtectedRoute from "@/app/_lib/ProtectedRoutes";
-
-// Still demo — results API not integrated yet
-const pendingResults = [
-  { class: "JSS1A", subject: "Mathematics", by: "Mrs Adeyemi", students: 28, submitted: "2 days ago" },
-  { class: "SSS2B", subject: "English Language", by: "Mr Okonkwo", students: 31, submitted: "2 days ago" },
-  { class: "JSS3A", subject: "Basic Science", by: "Mrs Bello", students: 26, submitted: "Yesterday" },
-];
-
-// Still demo — invoice breakdown by class not available at this level yet
-const feeStatus = [
-  { class: "JSS1A", students: 28, paid: 24, pct: 86 },
-  { class: "JSS2B", students: 30, paid: 14, pct: 47 },
-  { class: "SSS1A", students: 25, paid: 25, pct: 100 },
-  { class: "SSS3B", students: 22, paid: 9, pct: 41 },
-];
+import { useGetSession, useGetTerm, useStudents, useStaff, useInvoices, usePendingResults, useFeeTypes } from "../../_lib/hooks";
 
 const activity = [
   { action: "Result approved — JSS2A Mathematics", meta: "Ofem Esekpa", time: "10:42" },
@@ -31,13 +15,11 @@ const flagStyles = {
   quiet: "text-[#8A98A3]",
 };
 
-function feeTone(pct) {
-  return pct >= 70 ? "bg-[#EAEFE6] text-[#5E7A5E]" : "bg-[#F3E7E3] text-[#8B4A3D]";
-}
-
-function DashboardContent() {
+export default function DashboardPage() {
   const { data: session } = useGetSession();
   const { data: term } = useGetTerm();
+  const { data: pending = [], isLoading } = usePendingResults();
+  const { data: feeTypes = [], isLoading: feesLoading } = useFeeTypes();
 
   // ── Real data ──────────────────────────────────────────────────────
   const { data: students = [], isLoading: studentsLoading } = useStudents({
@@ -60,10 +42,10 @@ function DashboardContent() {
   const stats = [
     {
       label: "Results awaiting approval",
-      value: "—",
-      flag: "pending",
+      value: pending.length,
+      flag: pending.length === 1 ? "1 class pending" : `${pending.length} classes pending`,
       tone: "amber",
-      loading: false,
+      loading: isLoading,
     },
     {
       label: "Unpaid invoices",
@@ -153,19 +135,32 @@ function DashboardContent() {
             </tr>
           </thead>
           <tbody>
-            {pendingResults.map((r) => (
-              <tr key={r.class + r.subject}>
-                <td className="py-3.5 border-b border-[#DCD5C7] text-[13.5px]">{r.class}</td>
-                <td className="py-3.5 border-b border-[#DCD5C7] text-[13.5px]">{r.subject}</td>
-                <td className="py-3.5 border-b border-[#DCD5C7] text-[13.5px]">{r.by}</td>
-                <td className="py-3.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080] text-right">{r.students}</td>
-                <td className="py-3.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">{r.submitted}</td>
-                <td className="py-3.5 border-b border-[#DCD5C7] text-right">
-                  <button className="text-[12px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-3 py-1.5">Review</button>
-                  <button className="text-[12px] font-medium bg-[#1C2630] text-[#FAF8F4] rounded-[3px] px-3 py-1.5 ml-2">Approve</button>
+            {isLoading ? (
+              <tr>
+                <td colSpan={6} className="py-6">
+                  <div className="space-y-2">
+                    {[1,2,3].map(i => <div key={i} className="h-8 bg-[#E8E3DA] rounded-[3px] animate-pulse" />)}
+                  </div>
                 </td>
               </tr>
-            ))}
+            ) : pending.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="py-8 text-center text-[13px] text-[#8A98A3]">No results pending approval.</td>
+              </tr>
+            ) : (
+              pending.map((r) => (
+                <tr key={r.class_subject_id ?? r.subject_id + r.class_id}>
+                  <td className="py-3.5 border-b border-[#DCD5C7] text-[13.5px]">{r.class_name ?? "—"}</td>
+                  <td className="py-3.5 border-b border-[#DCD5C7] text-[13.5px]">{r.subject_name ?? "—"}</td>
+                  <td className="py-3.5 border-b border-[#DCD5C7] text-[13.5px] text-[#5C7080]">{r.submitted_by ?? "—"}</td>
+                  <td className="py-3.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080] text-right">{r.student_count ?? "—"}</td>
+                  <td className="py-3.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">{r.submitted_at ? new Date(r.submitted_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "—"}</td>
+                  <td className="py-3.5 border-b border-[#DCD5C7] text-right">
+                    <a href="/results" className="text-[12px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-3 py-1.5">Review</a>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -173,7 +168,7 @@ function DashboardContent() {
       <div className="grid grid-cols-[1.6fr_1fr] gap-9 mt-10">
         <div>
           <div className="flex justify-between items-baseline mb-4">
-            <h2 className="font-serif text-[18px] font-medium">Fee status by class</h2>
+            <h2 className="font-serif text-[18px] font-medium">Fee types this term</h2>
             <a href="/fees" className="text-[12.5px] text-[#9C7A3C] border-b border-[#C9B68A] pb-0.5 flex items-center gap-1">
               Fees module <LuArrowRight size={12} />
             </a>
@@ -181,29 +176,42 @@ function DashboardContent() {
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                {["Class", "Students", "Paid", "Status"].map((h, i) => (
-                  <th
-                    key={h}
-                    className={`text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7] ${i === 1 || i === 2 ? "text-right" : ""}`}
-                  >
+                {["Fee", "Category", "Amount", "Mandatory"].map((h) => (
+                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
                     {h}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {feeStatus.map((f) => (
-                <tr key={f.class}>
-                  <td className="py-3.5 border-b border-[#DCD5C7] text-[13.5px]">{f.class}</td>
-                  <td className="py-3.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080] text-right">{f.students}</td>
-                  <td className="py-3.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080] text-right">{f.paid}</td>
-                  <td className="py-3.5 border-b border-[#DCD5C7]">
-                    <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 ${feeTone(f.pct)}`}>
-                      {f.pct}% paid
-                    </span>
+              {feesLoading ? (
+                <tr>
+                  <td colSpan={4} className="py-6">
+                    <div className="space-y-2">
+                      {[1,2,3].map(i => <div key={i} className="h-7 bg-[#E8E3DA] rounded-[3px] animate-pulse" />)}
+                    </div>
                   </td>
                 </tr>
-              ))}
+              ) : feeTypes.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-8 text-center text-[13px] text-[#8A98A3]">No fee types configured.</td>
+                </tr>
+              ) : (
+                feeTypes.filter(f => f.is_active).map((f) => (
+                  <tr key={f.id}>
+                    <td className="py-3.5 border-b border-[#DCD5C7] text-[13.5px] font-medium">{f.name}</td>
+                    <td className="py-3.5 border-b border-[#DCD5C7] text-[13px] capitalize text-[#5C7080]">{f.category}</td>
+                    <td className="py-3.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">
+                      ₦{Number(f.amount).toLocaleString()}
+                    </td>
+                    <td className="py-3.5 border-b border-[#DCD5C7]">
+                      {f.is_mandatory
+                        ? <span className="inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 bg-[#FAEEDA] text-[#854F0B]">Mandatory</span>
+                        : <span className="text-[11.5px] text-[#8A98A3]">Optional</span>}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -227,14 +235,5 @@ function DashboardContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-
-export default function DashboardPage() {
-  return (
-    <ProtectedRoute allowedRoles={["principal", "vice_principal", "bursar"]}>
-      <DashboardContent />
-    </ProtectedRoute>
   );
 }

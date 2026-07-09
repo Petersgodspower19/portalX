@@ -2,24 +2,29 @@ import axios from "axios";
 const backendUrl = process.env.NEXT_PUBLIC_BACKENDURL;
 
 export const uploadResult = async (class_id, subject_id, term_id, file) => {
-    // form teacher only 
     try {
         const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.post(`${backendUrl}/api/v1/results/upload`,
-             {file}, {
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await axios.post(`${backendUrl}/api/v1/results/upload`, formData, {
             params: {
                 class_id, subject_id, term_id
-            }, 
+            },
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
             }
         });
         return res.data;
     } catch (error) {
+        console.log(error);
+        console.log(error.response?.data?.detail || "Something went wrong")
         throw new Error(
             error.response?.data?.detail || "Something went wrong"
-        ); 
+        );
     }
 }
 
@@ -165,11 +170,19 @@ export const getStudentResults = async (term_id) => {
                 Authorization: `Bearer ${token}`
             }
         });
+        console.log(res.data);
         return res.data;
     } catch (error) {
-        throw new Error(
-            error.response?.data?.detail || "Something went wrong"
-        ); 
+        console.log(error.response?.status);
+    console.log(error.response?.data);
+
+    const detail = error.response?.data?.detail;
+
+    if (Array.isArray(detail)) {
+        throw new Error(detail.map(e => e.msg).join(", "));
+    }
+
+    throw new Error(detail || "Something went wrong");
     }
 }
 

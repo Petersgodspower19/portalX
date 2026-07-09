@@ -15,7 +15,7 @@ function StudentDetailContent() {
   const queryClient = useQueryClient();
   const { data: student, isLoading, isError } = useStudent(id);
   const { user } = useAuth();
-  console.log(student)
+  // console.log(student)
 
   const [showTransfer, setShowTransfer] = useState(false);
   const canManage = ["principal", "vice_principal"].includes(user?.role);

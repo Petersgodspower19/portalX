@@ -126,3 +126,21 @@ export const deactivateStudent = async (student_id, reason) => {
         );
     }
 }
+
+
+export const getCurrentLoggedInStudent = async () => {
+    try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        const res = await axios.get(`${backendUrl}/api/v1/students/me`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw new Error(
+            error.response?.data?.detail || "Something went wrong"
+        );
+    }
+}

@@ -99,13 +99,37 @@ export const getCurrentUserProfile = async () => {
 };
 
 export const changePassword = async (current_password, new_password, confirm_password) => {
-  const res = await api.post("/api/v1/auth/password/change", {
+ try {
+     const res = await api.post("/api/v1/auth/password/change", {
     current_password,
     new_password,
     confirm_password,
   });
   return res.data;
+ } catch (error) {
+    console.log(error.response?.status);
+    console.log(error.response?.data);
+
+    const detail = error.response?.data?.detail;
+
+    if (Array.isArray(detail)) {
+        throw new Error(detail.map(e => e.msg).join(", "));
+    }
+
+    throw new Error(detail || "Something went wrong");
+ }
 };
+
+// console.log(error.response?.status);
+//     console.log(error.response?.data);
+
+//     const detail = error.response?.data?.detail;
+
+//     if (Array.isArray(detail)) {
+//         throw new Error(detail.map(e => e.msg).join(", "));
+//     }
+
+//     throw new Error(detail || "Something went wrong");
 
 export const resetStaffMemberPassword = async (user_id) => {
   const res = await api.post("/api/v1/auth/password/reset/staff", { user_id });

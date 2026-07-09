@@ -572,15 +572,15 @@ function ClassesPageContent() {
                       >
                         <div className="flex justify-between items-baseline">
                           <span className="font-semibold text-[#1C2630]">
-                            {cs.subject?.name || "Unknown Subject"}
+                            {cs.subject_name || "Unknown Subject"}
                           </span>
                           <span className="font-mono text-[11px] text-[#8A98A3]">
-                            {cs.subject?.code}
+                            {cs.subject_code}
                           </span>
                         </div>
                         <div className="text-[11.5px] text-[#5C7080] flex items-center gap-1">
                           <LuGraduationCap size={12} />
-                          Teacher: {cs.teacher ? `${cs.teacher.first_name} ${cs.teacher.last_name}` : "None"}
+                          Teacher: {cs.teacher_name ? `${cs.teacher_name} ` : "None"}
                         </div>
                       </div>
                     ))}

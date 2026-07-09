@@ -13,6 +13,7 @@ import {
 } from "../../_lib/results";
 import {
   usePendingResults, useClassResults, useGetTerm, useAssignedSubjects, useGetTeachersClass,
+  useClasses,
 } from "../../_lib/hooks";
 import { useAuth } from "../../_lib/AuthContext";
 import ProtectedRoute from "../../_lib/ProtectedRoutes";
@@ -116,7 +117,7 @@ function PendingTab({ isPrincipal, onViewClass }) {
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              {["Class", "Subject", "Submitted by", "Students", "Submitted", ""].map((h) => (
+              {["Class", "Subject",  ""].map((h) => (
                 <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
                   {h}
                 </th>
@@ -128,8 +129,6 @@ function PendingTab({ isPrincipal, onViewClass }) {
               <tr key={r.id ?? r.class_id + r.subject_id}>
                 <td className="py-3 border-b border-[#DCD5C7] text-[13.5px]">{r.class_name ?? r.class_id}</td>
                 <td className="py-3 border-b border-[#DCD5C7] text-[13px]">{r.subject_name ?? r.subject_id}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[13px] text-[#5C7080]">{r.submitted_by ?? "—"}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">{r.student_count ?? "—"}</td>
                 <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">{formatDate(r.submitted_at)}</td>
                 <td className="py-3 border-b border-[#DCD5C7] text-right">
                   <div className="flex items-center gap-1.5 justify-end">
@@ -183,6 +182,8 @@ function ClassResultsTab({ drilldown, onBack }) {
   const [classId, setClassId] = useState(drilldown?.class_id ?? "");
   const [termId] = useState(drilldown?.term_id ?? term?.id);
   const { data: results = [], isLoading } = useClassResults(classId, termId ?? term?.id);
+  const { data: classes = [], isLoading: loadingClasses } = useClasses();
+  console.log(results);
 
   return (
     <div>
@@ -193,14 +194,30 @@ function ClassResultsTab({ drilldown, onBack }) {
       )}
 
       {!drilldown && (
-        <div className="flex gap-3 mb-5">
-          <input
-            value={classId}
-            onChange={(e) => setClassId(e.target.value)}
-            placeholder="Enter class ID"
-            className="text-[13px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 bg-white outline-none w-48"
-          />
-        </div>
+        <>
+        <label className="block text-[12px] text-[#5C7080] mb-1.5">Class ID (optional)</label>
+           <div className="mb-6 max-w-[320px]">
+  <label className="block text-[12px] text-[#5C7080] mb-1.5">
+    Select Class
+  </label>
+
+  <select
+    value={classId}
+    onChange={(e) => setClassId(e.target.value)}
+    className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+  >
+    <option value="">
+      {loadingClasses ? "Loading classes..." : "Select a class"}
+    </option>
+
+    {classes.map((cls) => (
+      <option key={cls.id} value={cls.id}>
+        {cls.full_name}
+      </option>
+    ))}
+  </select>
+</div>
+        </>
       )}
 
       {drilldown && (
@@ -217,7 +234,7 @@ function ClassResultsTab({ drilldown, onBack }) {
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              {["Student", "Subject", "CA1", "CA2", "Exam", "Total", "Grade", "Status"].map((h) => (
+              {["Student", "Reg No",  "CA1", "CA2", "Exam", "Total", "Grade", "Status"].map((h) => (
                 <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
                   {h}
                 </th>
@@ -228,11 +245,12 @@ function ClassResultsTab({ drilldown, onBack }) {
             {results.map((r, i) => (
               <tr key={r.id ?? i}>
                 <td className="py-3 border-b border-[#DCD5C7] text-[13.5px]">{r.student_name ?? "—"}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[13px] text-[#5C7080]">{r.subject_name ?? "—"}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono">{r.ca1 ?? "—"}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono">{r.ca2 ?? "—"}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono">{r.exam ?? "—"}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono font-medium">{r.total ?? "—"}</td>
+                <td className="py-3 border-b border-[#DCD5C7] text-[13.5px]">{r.reg_number ?? "—"}</td>
+                {/* <td className="py-3 border-b border-[#DCD5C7] text-[13px] text-[#5C7080]">{r.subject_name ?? "—"}</td> */}
+                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono">{r.ca1_score ?? "—"}</td>
+                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono">{r.ca2_score ?? "—"}</td>
+                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono">{r.exam_score ?? "—"}</td>
+                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono font-medium">{r.total_score ?? "—"}</td>
                 <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#9C7A3C]">{r.grade ?? "—"}</td>
                 <td className="py-3 border-b border-[#DCD5C7]">
                   <ResultStatusPill status={r.status} />
@@ -300,6 +318,7 @@ function UploadView() {
   const termId = term?.id;
 
   const { data: subjects = [] } = useAssignedSubjects(classId, termId);
+  console.log(subjects);
 
   const [selectedSubject, setSelectedSubject] = useState("");
   const [file, setFile] = useState(null);
@@ -367,7 +386,7 @@ function UploadView() {
               >
                 <option value="">Select a subject</option>
                 {subjects.map((s) => (
-                  <option key={s.id ?? s.subject_id} value={s.id ?? s.subject_id}>
+                 <option key={s.id ?? s.subject_id} value={s.subject_id ?? s.id}>
                     {s.name ?? s.subject_name}
                   </option>
                 ))}
@@ -546,7 +565,7 @@ function formatDate(val) {
 
 export default function ResultsPage() {
   return (
-    <ProtectedRoute allowedRoles={["principal", "vice_principal", "form_teacher"]}>
+    <ProtectedRoute allowedRoles={["principal", "form_teacher"]}>
       <ResultsContent />
     </ProtectedRoute>
   );

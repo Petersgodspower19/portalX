@@ -27,10 +27,10 @@ function MyClassContent() {
     sort_by: "created_at",
     sort_order: "desc",
   });
-  console.log(students);
+  // console.log(students);
 
   const { data: subjects = [], isLoading: subjectsLoading } = useAssignedSubjects(classId, termId);
-  console.log(subjects);
+  // console.log(subjects);
 
   if (classLoading) {
     return <p className="text-[13.5px] text-[#5C7080]">Loading your class…</p>;
