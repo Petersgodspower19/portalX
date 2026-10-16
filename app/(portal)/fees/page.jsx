@@ -28,18 +28,18 @@ function FeesContent() {
     <div>
       <div className="mb-1.5">
         <h1 className="font-serif text-[27px] font-medium">Fees</h1>
-        <p className="text-[12.5px] text-[#5C7080] mt-1">Invoice management and fee configuration</p>
+        <p className="text-[12.5px] text-[#53657E] mt-1">Invoice management and fee configuration</p>
       </div>
 
-      <div className="border-b border-[#DCD5C7] mt-5 mb-6 flex gap-1">
+      <div className="border-b border-[#DFE6EF] mt-5 mb-6 flex gap-1">
         {TABS.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
             className={`text-[13px] font-medium px-3.5 py-2.5 border-b-2 -mb-px ${
               tab === t.key
-                ? "border-[#9C7A3C] text-[#1C2630]"
-                : "border-transparent text-[#8A98A3]"
+                ? "border-[#2563EB] text-[#172B4D]"
+                : "border-transparent text-[#697A91]"
             }`}
           >
             {t.label}
@@ -137,8 +137,8 @@ function InvoicesTab({ isPrincipal }) {
             { label: "Unpaid", value: unpaid, tone: "text-[#8B4A3D]" },
             { label: "Overridden", value: overridden, tone: "text-[#854F0B]" },
           ].map((s, i) => (
-            <div key={s.label} className={`px-6 ${i !== 0 ? "border-l border-[#DCD5C7]" : "pl-0"}`}>
-              <div className="text-[11px] uppercase tracking-[0.07em] text-[#5C7080] mb-1">{s.label}</div>
+            <div key={s.label} className={`px-6 ${i !== 0 ? "border-l border-[#DFE6EF]" : "pl-0"}`}>
+              <div className="text-[11px] uppercase tracking-[0.07em] text-[#53657E] mb-1">{s.label}</div>
               <div className={`font-serif text-[28px] font-medium ${s.tone}`}>{s.value}</div>
             </div>
           ))}
@@ -150,14 +150,14 @@ function InvoicesTab({ isPrincipal }) {
         <>
        
            <div className="mb-6 max-w-[320px]">
-  <label className="block text-[12px] text-[#5C7080] mb-1.5">
+  <label className="block text-[12px] text-[#53657E] mb-1.5">
     Select Class
   </label>
 
   <select
     value={classId}
     onChange={(e) => setClassId(e.target.value)}
-    className="w-full text-[11.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+    className="w-full text-[11.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]"
   >
     <option value="">
       {loadingClasses ? "Loading classes..." : "Select a class"}
@@ -174,7 +174,7 @@ function InvoicesTab({ isPrincipal }) {
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="text-[13px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 bg-white outline-none"
+          className="text-[13px] border border-[#DFE6EF] rounded-[4px] px-3 py-2 bg-white outline-none"
         >
           <option value="">All statuses</option>
           <option value="paid">Paid</option>
@@ -184,7 +184,7 @@ function InvoicesTab({ isPrincipal }) {
 
         <button
           onClick={() => setShowGenerateModal(true)}
-          className="ml-auto flex items-center gap-1.5 text-[12.5px] font-medium border border-[#DCD5C7] bg-white rounded-[4px] px-3.5 py-2"
+          className="ml-auto flex items-center gap-1.5 text-[12.5px] font-medium border border-[#DFE6EF] bg-white rounded-[4px] px-3.5 py-2"
         >
           <LuZap size={13} /> Generate invoices
         </button>
@@ -192,15 +192,15 @@ function InvoicesTab({ isPrincipal }) {
 
       {/* Invoices table */}
       {!termId ? (
-        <p className="text-[13.5px] text-[#8A98A3]">No active term — set one in School profile.</p>
+        <p className="text-[13.5px] text-[#697A91]">No active term — set one in School profile.</p>
       ) : isLoading ? (
-        <p className="text-[13.5px] text-[#5C7080]">Loading invoices…</p>
+        <p className="text-[13.5px] text-[#53657E]">Loading invoices…</p>
       ) : (
         <table className="w-full border-collapse">
           <thead>
             <tr>
               {["Student", "Reg No.", "Amount", "Status", ""].map((h) => (
-                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
+                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium pb-2.5 border-b border-[#DFE6EF]">
                   {h}
                 </th>
               ))}
@@ -209,24 +209,24 @@ function InvoicesTab({ isPrincipal }) {
           <tbody>
             {invoices.map((inv) => (
               <tr key={inv.id}>
-                <td className="py-3 border-b border-[#DCD5C7] text-[13.5px]">
+                <td className="py-3 border-b border-[#DFE6EF] text-[13.5px]">
                   {inv.student_name ?? `${inv.first_name ?? ""} ${inv.last_name ?? ""}`.trim()}
                 </td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[13px] text-[#5C7080]">
+                <td className="py-3 border-b border-[#DFE6EF] text-[13px] text-[#53657E]">
                   {inv.reg_number ?? inv.class_id ?? "—"}
                 </td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">
+                <td className="py-3 border-b border-[#DFE6EF] text-[12.5px] font-mono text-[#53657E]">
                   ₦{Number(inv.amount ?? 0).toLocaleString()}
                 </td>
-                <td className="py-3 border-b border-[#DCD5C7]">
+                <td className="py-3 border-b border-[#DFE6EF]">
                   <StatusPill status={inv.status} />
                 </td>
-                <td className="py-3 border-b border-[#DCD5C7] text-right">
+                <td className="py-3 border-b border-[#DFE6EF] text-right">
                   <div className="flex items-center gap-1.5 justify-end">
                     {inv.status === "unpaid" && (
                       <button
                         onClick={() => setPayModal(inv)}
-                        className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-2.5 py-1.5 text-[#5E7A5E]"
+                        className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DFE6EF] bg-white rounded-[3px] px-2.5 py-1.5 text-[#5E7A5E]"
                       >
                         <LuCheck size={11} /> Mark paid
                       </button>
@@ -234,7 +234,7 @@ function InvoicesTab({ isPrincipal }) {
                     {inv.status === "paid" && (
                       <button
                         onClick={() => setUnpayModal(inv)}
-                        className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-2.5 py-1.5 text-[#8B4A3D]"
+                        className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DFE6EF] bg-white rounded-[3px] px-2.5 py-1.5 text-[#8B4A3D]"
                       >
                         <LuX size={11} /> Reverse
                       </button>
@@ -242,7 +242,7 @@ function InvoicesTab({ isPrincipal }) {
                     {isPrincipal && inv.status !== "overridden" && (
                       <button
                         onClick={() => setOverrideModal({ id: inv.student_id, name: inv.student_name })}
-                        className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-2.5 py-1.5"
+                        className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DFE6EF] bg-white rounded-[3px] px-2.5 py-1.5"
                       >
                         Override
                       </button>
@@ -250,7 +250,7 @@ function InvoicesTab({ isPrincipal }) {
                     {isPrincipal && inv.status === "overridden" && (
                       <button
                         onClick={() => handleRemoveOverride(inv.student_id)}
-                        className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-2.5 py-1.5 text-[#8B4A3D]"
+                        className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DFE6EF] bg-white rounded-[3px] px-2.5 py-1.5 text-[#8B4A3D]"
                       >
                         Remove override
                       </button>
@@ -261,7 +261,7 @@ function InvoicesTab({ isPrincipal }) {
             ))}
             {invoices.length === 0 && (
               <tr>
-                <td colSpan={5} className="py-10 text-center text-[13px] text-[#8A98A3]">
+                <td colSpan={5} className="py-10 text-center text-[13px] text-[#697A91]">
                   No invoices found. Generate them above.
                 </td>
               </tr>
@@ -337,23 +337,23 @@ function FeeTypesTab({ isPrincipal }) {
   return (
     <div>
       <div className="flex justify-between items-baseline mb-5">
-        <p className="text-[12.5px] text-[#8A98A3]">Fee categories applied when generating invoices</p>
+        <p className="text-[12.5px] text-[#697A91]">Fee categories applied when generating invoices</p>
         <button
           onClick={() => setShowCreate(true)}
-          className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#1C2630] text-[#FAF8F4] rounded-[4px] px-3.5 py-2"
+          className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#172B4D] text-[#F4F7FB] rounded-[4px] px-3.5 py-2"
         >
           <LuPlus size={13} /> Add fee type
         </button>
       </div>
 
       {isLoading ? (
-        <p className="text-[13.5px] text-[#5C7080]">Loading fee types…</p>
+        <p className="text-[13.5px] text-[#53657E]">Loading fee types…</p>
       ) : (
         <table className="w-full border-collapse max-w-[760px]">
           <thead>
             <tr>
               {["Name", "Category", "Amount", "Mandatory", "Status", ""].map((h) => (
-                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
+                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium pb-2.5 border-b border-[#DFE6EF]">
                   {h}
                 </th>
               ))}
@@ -362,27 +362,27 @@ function FeeTypesTab({ isPrincipal }) {
           <tbody>
             {feeTypes.map((ft) => (
               <tr key={ft.id}>
-                <td className="py-3 border-b border-[#DCD5C7] text-[13.5px]">{ft.name}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[13px] capitalize text-[#5C7080]">{ft.category}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">
+                <td className="py-3 border-b border-[#DFE6EF] text-[13.5px]">{ft.name}</td>
+                <td className="py-3 border-b border-[#DFE6EF] text-[13px] capitalize text-[#53657E]">{ft.category}</td>
+                <td className="py-3 border-b border-[#DFE6EF] text-[12.5px] font-mono text-[#53657E]">
                   ₦{Number(ft.amount ?? 0).toLocaleString()}
                 </td>
-                <td className="py-3 border-b border-[#DCD5C7]">
+                <td className="py-3 border-b border-[#DFE6EF]">
                   {ft.is_mandatory
                     ? <span className="text-[11px] text-[#5E7A5E]">Yes</span>
-                    : <span className="text-[11px] text-[#8A98A3]">No</span>}
+                    : <span className="text-[11px] text-[#697A91]">No</span>}
                 </td>
-                <td className="py-3 border-b border-[#DCD5C7]">
+                <td className="py-3 border-b border-[#DFE6EF]">
                   <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 ${
                     ft.is_active !== false ? "bg-[#EAEFE6] text-[#5E7A5E]" : "bg-[#F3E7E3] text-[#8B4A3D]"
                   }`}>
                     {ft.is_active !== false ? "Active" : "Inactive"}
                   </span>
                 </td>
-                <td className="py-3 border-b border-[#DCD5C7] text-right">
+                <td className="py-3 border-b border-[#DFE6EF] text-right">
                   <button
                     onClick={() => setEditing(ft)}
-                    className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-2.5 py-1.5 ml-auto"
+                    className="flex items-center gap-1 text-[11.5px] font-medium border border-[#DFE6EF] bg-white rounded-[3px] px-2.5 py-1.5 ml-auto"
                   >
                     <LuPencil size={11} /> Edit
                   </button>
@@ -391,7 +391,7 @@ function FeeTypesTab({ isPrincipal }) {
             ))}
             {feeTypes.length === 0 && (
               <tr>
-                <td colSpan={6} className="py-10 text-center text-[13px] text-[#8A98A3]">
+                <td colSpan={6} className="py-10 text-center text-[13px] text-[#697A91]">
                   No fee types yet.
                 </td>
               </tr>
@@ -438,16 +438,16 @@ const set = (field) => (e) =>
 
   return (
     <Modal title="Generate invoices" onClose={onClose}>
-      <p className="text-[12.5px] text-[#8A98A3] mb-5">
+      <p className="text-[12.5px] text-[#697A91] mb-5">
         Generates invoices for the current term. Leave class empty to generate for all classes.
       </p>
       <form onSubmit={handleSubmit}>
         <div className="mb-5">
-          <label className="block text-[12px] text-[#5C7080] mb-1.5">Class ID (optional)</label>
+          <label className="block text-[12px] text-[#53657E] mb-1.5">Class ID (optional)</label>
            <select
   value={form.class_id}
   onChange={set("class_id")}
-    className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+    className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]"
   >
     <option value="">
       {loadingClasses ? "Loading classes..." : "Select a class"}
@@ -460,7 +460,7 @@ const set = (field) => (e) =>
     ))}
   </select>
         </div>
-        <button type="submit" disabled={isSaving} className="w-full bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60">
+        <button type="submit" disabled={isSaving} className="w-full bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60">
           {isSaving ? "Generating…" : "Generate"}
         </button>
       </form>
@@ -506,19 +506,19 @@ function FeeTypeModal({ feeType, onClose, onDone }) {
         <TF label="Amount (₦)" type="number" value={form.amount} onChange={set("amount")} />
 
         <div className="flex gap-5 mb-5">
-          <label className="flex items-center gap-2 text-[13px] text-[#5C7080] cursor-pointer">
+          <label className="flex items-center gap-2 text-[13px] text-[#53657E] cursor-pointer">
             <input type="checkbox" checked={form.is_mandatory} onChange={setCheck("is_mandatory")} />
             Mandatory
           </label>
           {isEdit && (
-            <label className="flex items-center gap-2 text-[13px] text-[#5C7080] cursor-pointer">
+            <label className="flex items-center gap-2 text-[13px] text-[#53657E] cursor-pointer">
               <input type="checkbox" checked={form.is_active} onChange={setCheck("is_active")} />
               Active
             </label>
           )}
         </div>
 
-        <button type="submit" disabled={isSaving} className="w-full bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60">
+        <button type="submit" disabled={isSaving} className="w-full bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60">
           {isSaving ? "Saving…" : isEdit ? "Save changes" : "Create fee type"}
         </button>
       </form>
@@ -544,20 +544,20 @@ function NoteModal({ title, label, confirmLabel, onClose, onConfirm, danger }) {
     <Modal title={title} onClose={onClose}>
       <form onSubmit={handleSubmit}>
         <div className="mb-5">
-          <label className="block text-[12px] text-[#5C7080] mb-1.5">{label}</label>
+          <label className="block text-[12px] text-[#53657E] mb-1.5">{label}</label>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             required
             rows={3}
-            className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C] resize-none"
+            className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB] resize-none"
           />
         </div>
         <button
           type="submit"
           disabled={isSaving}
           className={`w-full text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 ${
-            danger ? "bg-[#8B4A3D] text-white" : "bg-[#1C2630] text-[#FAF8F4]"
+            danger ? "bg-[#8B4A3D] text-white" : "bg-[#172B4D] text-[#F4F7FB]"
           }`}
         >
           {isSaving ? "Saving…" : confirmLabel}
@@ -576,7 +576,7 @@ function StatusPill({ status }) {
     overridden: "bg-[#FAEEDA] text-[#854F0B]",
   };
   return (
-    <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 capitalize ${map[status] ?? "bg-[#F3F3F3] text-[#8A98A3]"}`}>
+    <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 capitalize ${map[status] ?? "bg-[#F3F3F3] text-[#697A91]"}`}>
       {status ?? "—"}
     </span>
   );
@@ -586,7 +586,7 @@ function Modal({ title, onClose, children }) {
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-[100] px-6">
       <div className="bg-white rounded-[6px] w-full max-w-[420px] px-7 py-7 relative max-h-[90vh] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <button onClick={onClose} className="absolute top-5 right-5 text-[#8A98A3]">
+        <button onClick={onClose} className="absolute top-5 right-5 text-[#697A91]">
           <LuX size={18} />
         </button>
         <h2 className="font-serif text-[18px] font-medium mb-5">{title}</h2>
@@ -599,14 +599,14 @@ function Modal({ title, onClose, children }) {
 function TF({ label, type = "text", value, onChange, placeholder }) {
   return (
     <div className="mb-4">
-      <label className="block text-[12px] text-[#5C7080] mb-1.5">{label}</label>
+      <label className="block text-[12px] text-[#53657E] mb-1.5">{label}</label>
       <input
         type={type}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         required
-        className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+        className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]"
       />
     </div>
   );

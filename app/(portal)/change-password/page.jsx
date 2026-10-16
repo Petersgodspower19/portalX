@@ -39,18 +39,18 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F4] flex items-center justify-center px-6">
+    <div className="min-h-screen bg-[#F4F7FB] flex items-center justify-center px-6">
       <div className="w-full max-w-[400px]">
         <div className="text-center mb-8">
-          <div className="font-serif text-[24px] font-semibold text-[#1C2630]">PortalX</div>
-          <div className="text-[11px] uppercase tracking-[0.08em] text-[#9C7A3C] mt-1">
+          <div className="font-serif text-[24px] font-semibold text-[#172B4D]">PortalX</div>
+          <div className="text-[11px] uppercase tracking-[0.08em] text-[#2563EB] mt-1">
             Tarepet Montessori
           </div>
         </div>
 
-        <div className="bg-white border border-[#DCD5C7] rounded-[6px] px-7 py-7">
+        <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-7 py-7">
           <h2 className="font-serif text-[18px] font-medium mb-1">Set a new password</h2>
-          <p className="text-[12.5px] text-[#8A98A3] mb-6">
+          <p className="text-[12.5px] text-[#697A91] mb-6">
             You're required to change your password before continuing.
           </p>
 
@@ -62,7 +62,7 @@ export default function ChangePasswordPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 mt-1 disabled:opacity-60"
+              className="w-full bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 mt-1 disabled:opacity-60"
             >
               {isSubmitting ? "Saving…" : "Set new password"}
             </button>
@@ -78,9 +78,9 @@ function Field({ label, value, onChange }) {
 
   return (
     <div className="mb-4">
-      <label className="block text-[12px] text-[#5C7080] mb-1.5">{label}</label>
-      <div className="flex items-center gap-2 border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 focus-within:border-[#9C7A3C]">
-        <LuLock size={15} className="text-[#8A98A3] shrink-0" />
+      <label className="block text-[12px] text-[#53657E] mb-1.5">{label}</label>
+      <div className="flex items-center gap-2 border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 focus-within:border-[#2563EB]">
+        <LuLock size={15} className="text-[#697A91] shrink-0" />
         <input
           type={visible ? "text" : "password"}
           value={value}
@@ -91,7 +91,7 @@ function Field({ label, value, onChange }) {
         <button
           type="button"
           onClick={() => setVisible((v) => !v)}
-          className="text-[#8A98A3] hover:text-[#5C7080] shrink-0"
+          className="text-[#697A91] hover:text-[#53657E] shrink-0"
         >
           {visible ? <LuEyeOff size={15} /> : <LuEye size={15} />}
         </button>

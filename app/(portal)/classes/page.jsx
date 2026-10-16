@@ -286,8 +286,8 @@ function ClassesPageContent() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px]">
-        <LuLoader className="animate-spin text-[#9C7A3C]" size={36} />
-        <p className="text-[13.5px] text-[#5C7080] mt-3">Loading classes & subjects directory...</p>
+        <LuLoader className="animate-spin text-[#2563EB]" size={36} />
+        <p className="text-[13.5px] text-[#53657E] mt-3">Loading classes & subjects directory...</p>
       </div>
     );
   }
@@ -297,32 +297,32 @@ function ClassesPageContent() {
       {/* Top Header */}
       <div className="flex justify-between items-end mb-1.5">
         <div>
-          <h1 className="font-serif text-[27px] font-medium text-[#1C2630]">Classes & Subjects</h1>
-          <p className="text-[12.5px] text-[#5C7080] mt-1">
+          <h1 className="font-serif text-[27px] font-medium text-[#172B4D]">Classes & Subjects</h1>
+          <p className="text-[12.5px] text-[#53657E] mt-1">
             Configure classes, allocate subjects, and assign form teachers
           </p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setShowClassModal(true)}
-            className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#1C2630] text-[#FAF8F4] rounded-[4px] px-3.5 py-2.5 hover:bg-[#2b3947]"
+            className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#172B4D] text-[#F4F7FB] rounded-[4px] px-3.5 py-2.5 hover:bg-[#2b3947]"
           >
             <LuPlus size={14} /> New class
           </button>
           <button
             onClick={() => setShowSubjectModal(true)}
-            className="flex items-center gap-1.5 text-[12.5px] font-medium border border-[#DCD5C7] bg-white text-[#1C2630] rounded-[4px] px-3.5 py-2.5 hover:bg-gray-50"
+            className="flex items-center gap-1.5 text-[12.5px] font-medium border border-[#DFE6EF] bg-white text-[#172B4D] rounded-[4px] px-3.5 py-2.5 hover:bg-gray-50"
           >
             <LuPlus size={14} /> New subject
           </button>
         </div>
       </div>
 
-      <div className="border-b border-[#DCD5C7] my-5" />
+      <div className="border-b border-[#DFE6EF] my-5" />
 
       {/* Tabs Menu & Global Filters */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div className="flex border-b border-[#DCD5C7] md:border-none">
+        <div className="flex border-b border-[#DFE6EF] md:border-none">
           {TABS.map((t) => {
             const Icon = t.icon;
             return (
@@ -334,8 +334,8 @@ function ClassesPageContent() {
                 }}
                 className={`flex items-center gap-2 text-[13.5px] font-medium px-4 py-3 border-b-2 -mb-px transition-all ${
                   activeTab === t.key
-                    ? "border-[#9C7A3C] text-[#1C2630]"
-                    : "border-transparent text-[#8A98A3] hover:text-[#5C7080]"
+                    ? "border-[#2563EB] text-[#172B4D]"
+                    : "border-transparent text-[#697A91] hover:text-[#53657E]"
                 }`}
               >
                 <Icon size={15} />
@@ -347,8 +347,8 @@ function ClassesPageContent() {
 
         {/* Filters */}
         <div className="flex gap-3">
-          <div className="flex items-center gap-2 border border-[#DCD5C7] rounded-[4px] px-3 py-2 bg-white flex-1 max-w-[280px]">
-            <LuSearch size={14} className="text-[#8A98A3]" />
+          <div className="flex items-center gap-2 border border-[#DFE6EF] rounded-[4px] px-3 py-2 bg-white flex-1 max-w-[280px]">
+            <LuSearch size={14} className="text-[#697A91]" />
             <input
               value={activeTab === "classes" ? classSearch : subjectSearch}
               onChange={(e) => {
@@ -363,7 +363,7 @@ function ClassesPageContent() {
           <select
             value={levelFilter}
             onChange={(e) => setLevelFilter(e.target.value)}
-            className="text-[13px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 bg-white outline-none"
+            className="text-[13px] border border-[#DFE6EF] rounded-[4px] px-3 py-2 bg-white outline-none"
           >
             <option value="">All levels</option>
             <option value="JSS">Junior Secondary (JSS)</option>
@@ -375,22 +375,22 @@ function ClassesPageContent() {
       {/* Main Grid split */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Directory Listing (Left 2 Columns) */}
-        <div className="lg:col-span-2 bg-white border border-[#DCD5C7] rounded-[6px] p-5">
+        <div className="min-w-0 overflow-x-auto lg:col-span-2 bg-white border border-[#DFE6EF] rounded-[6px] p-5">
           {activeTab === "classes" ? (
             <div>
               <div className="mb-4">
-                <h3 className="font-serif text-[16px] font-medium text-[#1C2630]">Available Classes</h3>
-                <p className="text-[11.5px] text-[#5C7080]">Select a class to manage its form teacher and subjects</p>
+                <h3 className="font-serif text-[16px] font-medium text-[#172B4D]">Available Classes</h3>
+                <p className="text-[11.5px] text-[#53657E]">Select a class to manage its form teacher and subjects</p>
               </div>
 
               {filteredClasses.length === 0 ? (
-                <p className="text-[13px] text-[#8A98A3] text-center py-8">No classes found.</p>
+                <p className="text-[13px] text-[#697A91] text-center py-8">No classes found.</p>
               ) : (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr>
                       {["Class Name", "Arm", "Level", "Form Teacher", ""].map((h) => (
-                        <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
+                        <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium pb-2.5 border-b border-[#DFE6EF]">
                           {h}
                         </th>
                       ))}
@@ -401,25 +401,25 @@ function ClassesPageContent() {
                       <tr
                         key={c.id}
                         onClick={() => fetchClassDetails(c)}
-                        className={`cursor-pointer hover:bg-[#FAF8F4]/80 transition-colors ${
+                        className={`cursor-pointer hover:bg-[#F4F7FB]/80 transition-colors ${
                           selectedClass?.id === c.id ? "bg-[#FAEEDA]/50" : ""
                         }`}
                       >
-                        <td className="py-3 border-b border-[#DCD5C7] text-[13.5px] font-medium text-[#1C2630]">
+                        <td className="py-3 border-b border-[#DFE6EF] text-[13.5px] font-medium text-[#172B4D]">
                           {c.name}
                         </td>
-                        <td className="py-3 border-b border-[#DCD5C7] text-[13px] font-mono text-[#5C7080]">
+                        <td className="py-3 border-b border-[#DFE6EF] text-[13px] font-mono text-[#53657E]">
                           {c.arm}
                         </td>
-                        <td className="py-3 border-b border-[#DCD5C7] text-[13px]">
-                          <span className="inline-block text-[11px] font-medium bg-gray-100 text-[#5C7080] rounded-[3px] px-1.5 py-0.5">
+                        <td className="py-3 border-b border-[#DFE6EF] text-[13px]">
+                          <span className="inline-block text-[11px] font-medium bg-gray-100 text-[#53657E] rounded-[3px] px-1.5 py-0.5">
                             {c.level}
                           </span>
                         </td>
-                        <td className="py-3 border-b border-[#DCD5C7] text-[13px] text-[#5C7080]">
+                        <td className="py-3 border-b border-[#DFE6EF] text-[13px] text-[#53657E]">
                           {getStaffName(c.form_teacher_id)}
                         </td>
-                        <td className="py-3 border-b border-[#DCD5C7] text-right text-[12px] font-medium text-[#9C7A3C]">
+                        <td className="py-3 border-b border-[#DFE6EF] text-right text-[12px] font-medium text-[#2563EB]">
                           Manage &rarr;
                         </td>
                       </tr>
@@ -431,18 +431,18 @@ function ClassesPageContent() {
           ) : (
             <div>
               <div className="mb-4">
-                <h3 className="font-serif text-[16px] font-medium text-[#1C2630]">Subjects Catalog</h3>
-                <p className="text-[11.5px] text-[#5C7080]">School-wide subjects configuration</p>
+                <h3 className="font-serif text-[16px] font-medium text-[#172B4D]">Subjects Catalog</h3>
+                <p className="text-[11.5px] text-[#53657E]">School-wide subjects configuration</p>
               </div>
 
               {filteredSubjects.length === 0 ? (
-                <p className="text-[13px] text-[#8A98A3] text-center py-8">No subjects found.</p>
+                <p className="text-[13px] text-[#697A91] text-center py-8">No subjects found.</p>
               ) : (
                 <table className="w-full border-collapse">
                   <thead>
                     <tr>
                       {["Subject Name", "Code", "Level", ""].map((h) => (
-                        <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
+                        <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium pb-2.5 border-b border-[#DFE6EF]">
                           {h}
                         </th>
                       ))}
@@ -450,19 +450,19 @@ function ClassesPageContent() {
                   </thead>
                   <tbody>
                     {filteredSubjects.map((s) => (
-                      <tr key={s.id} className="hover:bg-[#FAF8F4]/30 transition-colors">
-                        <td className="py-3 border-b border-[#DCD5C7] text-[13.5px] font-medium text-[#1C2630]">
+                      <tr key={s.id} className="hover:bg-[#F4F7FB]/30 transition-colors">
+                        <td className="py-3 border-b border-[#DFE6EF] text-[13.5px] font-medium text-[#172B4D]">
                           {s.name}
                         </td>
-                        <td className="py-3 border-b border-[#DCD5C7] text-[13px] font-mono text-[#5C7080]">
+                        <td className="py-3 border-b border-[#DFE6EF] text-[13px] font-mono text-[#53657E]">
                           {s.code}
                         </td>
-                        <td className="py-3 border-b border-[#DCD5C7] text-[13px]">
-                          <span className="inline-block text-[11px] font-medium bg-gray-100 text-[#5C7080] rounded-[3px] px-1.5 py-0.5">
+                        <td className="py-3 border-b border-[#DFE6EF] text-[13px]">
+                          <span className="inline-block text-[11px] font-medium bg-gray-100 text-[#53657E] rounded-[3px] px-1.5 py-0.5">
                             {s.level}
                           </span>
                         </td>
-                        <td className="py-3 border-b border-[#DCD5C7] text-right">
+                        <td className="py-3 border-b border-[#DFE6EF] text-right">
                           {isPrincipal && (
                             <button
                               onClick={() => handleDeleteSubject(s.id)}
@@ -483,12 +483,12 @@ function ClassesPageContent() {
         </div>
 
         {/* Detailed Inspector Panel (Right 1 Column) */}
-        <div className="bg-white border border-[#DCD5C7] rounded-[6px] p-5">
+        <div className="min-w-0 bg-white border border-[#DFE6EF] rounded-[6px] p-5">
           {activeTab === "classes" && selectedClass ? (
             <div>
-              <div className="flex justify-between items-start border-b border-[#DCD5C7] pb-3 mb-4">
+              <div className="flex justify-between items-start border-b border-[#DFE6EF] pb-3 mb-4">
                 <div>
-                  <h3 className="font-serif text-[17px] font-medium text-[#1C2630]">
+                  <h3 className="font-serif text-[17px] font-medium text-[#172B4D]">
                     {selectedClass.name} {selectedClass.arm}
                   </h3>
                   <span className="text-[11.5px] bg-[#EAEFE6] text-[#5E7A5E] font-medium rounded px-1.5 py-0.5 mt-1 inline-block">
@@ -497,7 +497,7 @@ function ClassesPageContent() {
                 </div>
                 <button
                   onClick={() => setSelectedClass(null)}
-                  className="text-[#8A98A3] hover:text-[#5C7080] p-1"
+                  className="text-[#697A91] hover:text-[#53657E] p-1"
                 >
                   <LuX size={16} />
                 </button>
@@ -505,15 +505,16 @@ function ClassesPageContent() {
 
               {/* Form Teacher Control */}
               <div className="mb-6">
-                <label className="block text-[11.5px] uppercase tracking-wider text-[#8A98A3] mb-1.5 font-medium">
+                <label htmlFor="class-form-teacher" className="block text-[11.5px] uppercase tracking-wider text-[#697A91] mb-1.5 font-medium">
                   Form Teacher
                 </label>
                 {isPrincipal ? (
-                  <div className="flex gap-2">
+                  <div className="flex min-w-0 flex-col items-stretch gap-2">
                     <select
+                      id="class-form-teacher"
                       value={editingTeacherId}
                       onChange={(e) => setEditingTeacherId(e.target.value)}
-                      className="text-[13px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 bg-white outline-none flex-1 focus:border-[#9C7A3C]"
+                      className="w-full min-w-0 max-w-full text-[13px] border border-[#DFE6EF] rounded-[4px] px-3 py-2 bg-white outline-none focus:border-[#2563EB]"
                     >
                       <option value="">Unassigned</option>
                       {staff.map((member) => (
@@ -525,16 +526,16 @@ function ClassesPageContent() {
                     <button
                       onClick={handleUpdateFormTeacher}
                       disabled={isSavingTeacher || editingTeacherId === (selectedClass.form_teacher_id || "")}
-                      className="bg-[#1C2630] text-[#FAF8F4] rounded-[4px] px-3.5 py-2 text-[12px] font-medium disabled:opacity-50 hover:bg-[#2b3947]"
+                      className="self-end shrink-0 bg-[#172B4D] text-[#F4F7FB] rounded-[4px] px-3.5 py-2 text-[12px] font-medium disabled:opacity-50 hover:bg-[#2b3947]"
                     >
                       {isSavingTeacher ? "Saving..." : "Save"}
                     </button>
                   </div>
                 ) : (
-                  <div className="text-[13.5px] font-medium text-[#1C2630] flex items-center gap-1.5 bg-[#FAF8F4] rounded p-2.5 border border-[#E5E0D5]">
-                    <LuUser className="text-[#8A98A3]" size={14} />
+                  <div className="text-[13.5px] font-medium text-[#172B4D] flex items-center gap-1.5 bg-[#F4F7FB] rounded p-2.5 border border-[#E5E0D5]">
+                    <LuUser className="text-[#697A91]" size={14} />
                     {getStaffName(selectedClass.form_teacher_id)}
-                    <span className="text-[10.5px] text-[#8A98A3] font-normal block ml-auto italic">
+                    <span className="text-[10.5px] text-[#697A91] font-normal block ml-auto italic">
                       (Read-only for VP)
                     </span>
                   </div>
@@ -544,12 +545,12 @@ function ClassesPageContent() {
               {/* Assigned Subjects */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <label className="block text-[11.5px] uppercase tracking-wider text-[#8A98A3] font-medium">
+                  <label className="block text-[11.5px] uppercase tracking-wider text-[#697A91] font-medium">
                     Allocated Subjects
                   </label>
                   <button
                     onClick={() => setShowAssignSubjectModal(true)}
-                    className="text-[11.5px] text-[#9C7A3C] hover:text-[#7d612f] font-medium flex items-center gap-1"
+                    className="text-[11.5px] text-[#2563EB] hover:text-[#7d612f] font-medium flex items-center gap-1"
                   >
                     <LuPlus size={12} /> Assign subject
                   </button>
@@ -557,10 +558,10 @@ function ClassesPageContent() {
 
                 {isLoadingClassDetails ? (
                   <div className="flex justify-center py-6">
-                    <LuLoader className="animate-spin text-[#8A98A3]" size={20} />
+                    <LuLoader className="animate-spin text-[#697A91]" size={20} />
                   </div>
                 ) : classSubjects.length === 0 ? (
-                  <p className="text-[12.5px] text-[#8A98A3] italic bg-[#FAF8F4] p-3 text-center rounded border border-[#E5E0D5]">
+                  <p className="text-[12.5px] text-[#697A91] italic bg-[#F4F7FB] p-3 text-center rounded border border-[#E5E0D5]">
                     No subjects assigned to this class yet.
                   </p>
                 ) : (
@@ -568,17 +569,17 @@ function ClassesPageContent() {
                     {classSubjects.map((cs) => (
                       <div
                         key={cs.id}
-                        className="bg-[#FAF8F4] border border-[#E5E0D5] rounded p-2.5 text-[13px] flex flex-col gap-1"
+                        className="bg-[#F4F7FB] border border-[#E5E0D5] rounded p-2.5 text-[13px] flex flex-col gap-1"
                       >
                         <div className="flex justify-between items-baseline">
-                          <span className="font-semibold text-[#1C2630]">
+                          <span className="font-semibold text-[#172B4D]">
                             {cs.subject_name || "Unknown Subject"}
                           </span>
-                          <span className="font-mono text-[11px] text-[#8A98A3]">
+                          <span className="font-mono text-[11px] text-[#697A91]">
                             {cs.subject_code}
                           </span>
                         </div>
-                        <div className="text-[11.5px] text-[#5C7080] flex items-center gap-1">
+                        <div className="text-[11.5px] text-[#53657E] flex items-center gap-1">
                           <LuGraduationCap size={12} />
                           Teacher: {cs.teacher_name ? `${cs.teacher_name} ` : "None"}
                         </div>
@@ -589,7 +590,7 @@ function ClassesPageContent() {
               </div>
             </div>
           ) : (
-            <div className="text-center py-12 text-[#8A98A3] flex flex-col items-center justify-center h-full min-h-[220px]">
+            <div className="text-center py-12 text-[#697A91] flex flex-col items-center justify-center h-full min-h-[220px]">
               <LuBookOpen size={30} className="mb-2.5 opacity-60" />
               <p className="text-[13px] font-medium">No Class Selected</p>
               <p className="text-[11.5px] mt-1 max-w-[200px]">
@@ -606,7 +607,7 @@ function ClassesPageContent() {
           <div className="bg-white rounded-[6px] w-full max-w-[420px] px-7 py-7 relative">
             <button
               onClick={() => setShowClassModal(false)}
-              className="absolute top-5 right-5 text-[#8A98A3]"
+              className="absolute top-5 right-5 text-[#697A91]"
             >
               <LuX size={18} />
             </button>
@@ -616,35 +617,35 @@ function ClassesPageContent() {
             <form onSubmit={handleCreateClassSubmit}>
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div>
-                  <label className="block text-[12px] text-[#5C7080] mb-1.5">Class Name</label>
+                  <label className="block text-[12px] text-[#53657E] mb-1.5">Class Name</label>
                   <input
                     type="text"
                     placeholder="e.g. JSS 1, SSS 3"
                     value={classForm.name}
                     onChange={(e) => setClassForm((f) => ({ ...f, name: e.target.value }))}
                     required
-                    className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 outline-none focus:border-[#9C7A3C]"
+                    className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2 outline-none focus:border-[#2563EB]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[12px] text-[#5C7080] mb-1.5">Arm</label>
+                  <label className="block text-[12px] text-[#53657E] mb-1.5">Arm</label>
                   <input
                     type="text"
                     placeholder="e.g. A, B, Gold"
                     value={classForm.arm}
                     onChange={(e) => setClassForm((f) => ({ ...f, arm: e.target.value }))}
                     required
-                    className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 outline-none focus:border-[#9C7A3C]"
+                    className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2 outline-none focus:border-[#2563EB]"
                   />
                 </div>
               </div>
 
               <div className="mb-4">
-                <label className="block text-[12px] text-[#5C7080] mb-1.5">Level Group</label>
+                <label className="block text-[12px] text-[#53657E] mb-1.5">Level Group</label>
                 <select
                   value={classForm.level}
                   onChange={(e) => setClassForm((f) => ({ ...f, level: e.target.value }))}
-                  className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#9C7A3C]"
+                  className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#2563EB]"
                 >
                   <option value="JSS">Junior Secondary (JSS)</option>
                   <option value="SSS">Senior Secondary (SSS)</option>
@@ -652,13 +653,13 @@ function ClassesPageContent() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-[12px] text-[#5C7080] mb-1.5">
-                  Initial Form Teacher <span className="text-[#8A98A3]">(Optional)</span>
+                <label className="block text-[12px] text-[#53657E] mb-1.5">
+                  Initial Form Teacher <span className="text-[#697A91]">(Optional)</span>
                 </label>
                 <select
                   value={classForm.form_teacher_id}
                   onChange={(e) => setClassForm((f) => ({ ...f, form_teacher_id: e.target.value }))}
-                  className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#9C7A3C]"
+                  className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#2563EB]"
                 >
                   <option value="">Unassigned</option>
                   {staff.map((member) => (
@@ -672,7 +673,7 @@ function ClassesPageContent() {
               <button
                 type="submit"
                 disabled={isSubmittingClass}
-                className="w-full bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#2b3947]"
+                className="w-full bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#2b3947]"
               >
                 {isSubmittingClass ? "Creating…" : "Create class"}
               </button>
@@ -687,7 +688,7 @@ function ClassesPageContent() {
           <div className="bg-white rounded-[6px] w-full max-w-[420px] px-7 py-7 relative">
             <button
               onClick={() => setShowSubjectModal(false)}
-              className="absolute top-5 right-5 text-[#8A98A3]"
+              className="absolute top-5 right-5 text-[#697A91]"
             >
               <LuX size={18} />
             </button>
@@ -696,35 +697,35 @@ function ClassesPageContent() {
 
             <form onSubmit={handleCreateSubjectSubmit}>
               <div className="mb-4">
-                <label className="block text-[12px] text-[#5C7080] mb-1.5">Subject Name</label>
+                <label className="block text-[12px] text-[#53657E] mb-1.5">Subject Name</label>
                 <input
                   type="text"
                   placeholder="e.g. Mathematics, English Literature"
                   value={subjectForm.name}
                   onChange={(e) => setSubjectForm((f) => ({ ...f, name: e.target.value }))}
                   required
-                  className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 outline-none focus:border-[#9C7A3C]"
+                  className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2 outline-none focus:border-[#2563EB]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-6">
                 <div>
-                  <label className="block text-[12px] text-[#5C7080] mb-1.5">Subject Code</label>
+                  <label className="block text-[12px] text-[#53657E] mb-1.5">Subject Code</label>
                   <input
                     type="text"
                     placeholder="e.g. MTH101"
                     value={subjectForm.code}
                     onChange={(e) => setSubjectForm((f) => ({ ...f, code: e.target.value }))}
                     required
-                    className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 outline-none focus:border-[#9C7A3C]"
+                    className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2 outline-none focus:border-[#2563EB]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[12px] text-[#5C7080] mb-1.5">Level Group</label>
+                  <label className="block text-[12px] text-[#53657E] mb-1.5">Level Group</label>
                   <select
                     value={subjectForm.level}
                     onChange={(e) => setSubjectForm((f) => ({ ...f, level: e.target.value }))}
-                    className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#9C7A3C]"
+                    className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#2563EB]"
                   >
                     <option value="JSS">JSS</option>
                     <option value="SSS">SSS</option>
@@ -735,7 +736,7 @@ function ClassesPageContent() {
               <button
                 type="submit"
                 disabled={isSubmittingSubject}
-                className="w-full bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#2b3947]"
+                className="w-full bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#2b3947]"
               >
                 {isSubmittingSubject ? "Creating…" : "Create subject"}
               </button>
@@ -750,24 +751,24 @@ function ClassesPageContent() {
           <div className="bg-white rounded-[6px] w-full max-w-[420px] px-7 py-7 relative">
             <button
               onClick={() => setShowAssignSubjectModal(false)}
-              className="absolute top-5 right-5 text-[#8A98A3]"
+              className="absolute top-5 right-5 text-[#697A91]"
             >
               <LuX size={18} />
             </button>
 
             <h2 className="font-serif text-[18px] font-medium mb-1">Assign subject to class</h2>
-            <p className="text-[12.5px] text-[#5C7080] mb-5">
-              Target class: <span className="font-semibold text-[#1C2630]">{selectedClass.name} {selectedClass.arm}</span>
+            <p className="text-[12.5px] text-[#53657E] mb-5">
+              Target class: <span className="font-semibold text-[#172B4D]">{selectedClass.name} {selectedClass.arm}</span>
             </p>
 
             <form onSubmit={handleAssignSubjectSubmit}>
               <div className="mb-4">
-                <label className="block text-[12px] text-[#5C7080] mb-1.5">Subject</label>
+                <label className="block text-[12px] text-[#53657E] mb-1.5">Subject</label>
                 <select
                   value={assignForm.subject_id}
                   onChange={(e) => setAssignForm((f) => ({ ...f, subject_id: e.target.value }))}
                   required
-                  className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#9C7A3C]"
+                  className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#2563EB]"
                 >
                   <option value="">Select a subject</option>
                   {subjects
@@ -783,12 +784,12 @@ function ClassesPageContent() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-[12px] text-[#5C7080] mb-1.5">Assign Teacher</label>
+                <label className="block text-[12px] text-[#53657E] mb-1.5">Assign Teacher</label>
                 <select
                   value={assignForm.teacher_id}
                   onChange={(e) => setAssignForm((f) => ({ ...f, teacher_id: e.target.value }))}
                   required
-                  className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#9C7A3C]"
+                  className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 bg-white outline-none focus:border-[#2563EB]"
                 >
                   <option value="">Select teacher</option>
                   {staff.map((member) => (
@@ -802,7 +803,7 @@ function ClassesPageContent() {
               <button
                 type="submit"
                 disabled={isSubmittingAssignment}
-                className="w-full bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#2b3947]"
+                className="w-full bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#2b3947]"
               >
                 {isSubmittingAssignment ? "Allocating…" : "Allocate subject"}
               </button>

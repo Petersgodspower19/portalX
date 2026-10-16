@@ -94,23 +94,23 @@ function StaffContent() {
       <div className="flex justify-between items-end mb-1.5">
         <div>
           <h1 className="font-serif text-[27px] font-medium">Staff</h1>
-          <p className="text-[12.5px] text-[#5C7080] mt-1">
+          <p className="text-[12.5px] text-[#53657E] mt-1">
             {staff.length} staff member{staff.length === 1 ? "" : "s"}
           </p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#1C2630] text-[#FAF8F4] rounded-[4px] px-3.5 py-2.5"
+          className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#172B4D] text-[#F4F7FB] rounded-[4px] px-3.5 py-2.5"
         >
           <LuPlus size={14} /> Add staff
         </button>
       </div>
 
-      <div className="border-b border-[#DCD5C7] my-5" />
+      <div className="border-b border-[#DFE6EF] my-5" />
 
       <div className="flex gap-3 mb-5">
-        <div className="flex items-center gap-2 border border-[#DCD5C7] rounded-[4px] px-3 py-2 bg-white flex-1 max-w-[280px]">
-          <LuSearch size={14} className="text-[#8A98A3]" />
+        <div className="flex items-center gap-2 border border-[#DFE6EF] rounded-[4px] px-3 py-2 bg-white flex-1 max-w-[280px]">
+          <LuSearch size={14} className="text-[#697A91]" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -122,7 +122,7 @@ function StaffContent() {
         <select
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
-          className="text-[13px] border border-[#DCD5C7] rounded-[4px] px-3 py-2 bg-white outline-none"
+          className="text-[13px] border border-[#DFE6EF] rounded-[4px] px-3 py-2 bg-white outline-none"
         >
           <option value="">All roles</option>
           {ROLES.map((r) => (
@@ -130,7 +130,7 @@ function StaffContent() {
           ))}
         </select>
 
-        <label className="flex items-center gap-2 text-[13px] text-[#5C7080] px-2">
+        <label className="flex items-center gap-2 text-[13px] text-[#53657E] px-2">
           <input
             type="checkbox"
             checked={activeOnly}
@@ -141,13 +141,13 @@ function StaffContent() {
       </div>
 
       {isLoading ? (
-        <p className="text-[13.5px] text-[#5C7080]">Loading staff…</p>
+        <p className="text-[13.5px] text-[#53657E]">Loading staff…</p>
       ) : (
         <table className="w-full border-collapse">
           <thead>
             <tr>
               {["Name", "Email", "Phone", "Role", "Status", ""].map((h) => (
-                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
+                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium pb-2.5 border-b border-[#DFE6EF]">
                   {h}
                 </th>
               ))}
@@ -156,27 +156,27 @@ function StaffContent() {
           <tbody>
             {filtered.map((s) => (
               <tr key={s.id}>
-                <td className="py-3 border-b border-[#DCD5C7] text-[13.5px]">{s.first_name} {s.last_name}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">{s.email}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">{s.phone}</td>
-                <td className="py-3 border-b border-[#DCD5C7] text-[13px] capitalize">{s.role?.replace("_", " ")}</td>
-                <td className="py-3 border-b border-[#DCD5C7]">
+                <td className="py-3 border-b border-[#DFE6EF] text-[13.5px]">{s.first_name} {s.last_name}</td>
+                <td className="py-3 border-b border-[#DFE6EF] text-[12.5px] font-mono text-[#53657E]">{s.email}</td>
+                <td className="py-3 border-b border-[#DFE6EF] text-[12.5px] font-mono text-[#53657E]">{s.phone}</td>
+                <td className="py-3 border-b border-[#DFE6EF] text-[13px] capitalize">{s.role?.replace("_", " ")}</td>
+                <td className="py-3 border-b border-[#DFE6EF]">
                   <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 ${
                     s.is_active ? "bg-[#EAEFE6] text-[#5E7A5E]" : "bg-[#F3E7E3] text-[#8B4A3D]"
                   }`}>
                     {s.is_active ? "Active" : "Inactive"}
                   </span>
                 </td>
-                <td className="py-3 border-b border-[#DCD5C7] text-right flex items-center gap-4">
+                <td className="py-3 border-b border-[#DFE6EF] text-right flex items-center gap-4">
                   <button
                     onClick={() => handleToggleActive(s)}
-                    className="flex items-center gap-1.5 text-[12px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-3 py-1.5 ml-auto"
+                    className="flex items-center gap-1.5 text-[12px] font-medium border border-[#DFE6EF] bg-white rounded-[3px] px-3 py-1.5 ml-auto"
                   >
                     {s.is_active ? <LuUserX size={12} /> : <LuUserCheck size={12} />}
                     {s.is_active ? "Deactivate" : "Reactivate"}
                   </button>
                   <Link href={`/staff/${s.id}`}>
-                    <button className="flex items-center gap-1.5 text-[12px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-3 py-1.5 ml-auto">
+                    <button className="flex items-center gap-1.5 text-[12px] font-medium border border-[#DFE6EF] bg-white rounded-[3px] px-3 py-1.5 ml-auto">
                       <LuPencil size={12} />
                       View
                     </button>
@@ -186,7 +186,7 @@ function StaffContent() {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={6} className="py-8 text-center text-[13px] text-[#8A98A3]">
+                <td colSpan={6} className="py-8 text-center text-[13px] text-[#697A91]">
                   No staff match these filters.
                 </td>
               </tr>
@@ -250,7 +250,7 @@ function AddStaffModal({ onClose, onCreated }) {
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-[100] px-6">
       <div className="bg-white rounded-[6px] w-full max-w-[420px] px-7 py-7 relative">
-        <button onClick={onClose} className="absolute top-5 right-5 text-[#8A98A3]">
+        <button onClick={onClose} className="absolute top-5 right-5 text-[#697A91]">
           <LuX size={18} />
         </button>
 
@@ -265,11 +265,11 @@ function AddStaffModal({ onClose, onCreated }) {
           <TextField label="Phone" value={form.phone} onChange={handleChange("phone")} />
 
           <div className="mb-5">
-            <label className="block text-[12px] text-[#5C7080] mb-1.5">Role</label>
+            <label className="block text-[12px] text-[#53657E] mb-1.5">Role</label>
             <select
               value={form.role}
               onChange={handleChange("role")}
-              className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+              className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]"
             >
               {ROLES.map((r) => (
                 <option key={r} value={r}>{r.replace("_", " ")}</option>
@@ -280,7 +280,7 @@ function AddStaffModal({ onClose, onCreated }) {
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60"
+            className="w-full bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60"
           >
             {isSaving ? "Creating…" : "Create account"}
           </button>
@@ -315,25 +315,25 @@ function DeactivateStaffModal({ member, onClose, onDeactivated }) {
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-[100] px-6">
       <div className="bg-white rounded-[6px] w-full max-w-[420px] px-7 py-7 relative">
-        <button onClick={onClose} className="absolute top-5 right-5 text-[#8A98A3]">
+        <button onClick={onClose} className="absolute top-5 right-5 text-[#697A91]">
           <LuX size={18} />
         </button>
 
         <h2 className="font-serif text-[18px] font-medium mb-2">Deactivate staff member</h2>
-        <p className="text-[13px] text-[#5C7080] mb-5">
-          Are you sure you want to deactivate <span className="font-medium text-[#1C2630]">{member.first_name} {member.last_name}</span>? They will no longer be able to log in to the portal.
+        <p className="text-[13px] text-[#53657E] mb-5">
+          Are you sure you want to deactivate <span className="font-medium text-[#172B4D]">{member.first_name} {member.last_name}</span>? They will no longer be able to log in to the portal.
         </p>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
-            <label className="block text-[12px] text-[#5C7080] mb-1.5">Reason for deactivation</label>
+            <label className="block text-[12px] text-[#53657E] mb-1.5">Reason for deactivation</label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g. Resigned, End of contract, Suspended"
               required
               rows={3}
-              className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C] resize-none"
+              className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB] resize-none"
             />
           </div>
 
@@ -341,14 +341,14 @@ function DeactivateStaffModal({ member, onClose, onDeactivated }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 text-[13.5px] font-medium border border-[#DCD5C7] text-[#5C7080] rounded-[4px] py-2.5 hover:bg-gray-50 transition-colors"
+              className="flex-1 text-[13.5px] font-medium border border-[#DFE6EF] text-[#53657E] rounded-[4px] py-2.5 hover:bg-gray-50 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="flex-1 bg-[#8B4A3D] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#723B30] transition-colors"
+              className="flex-1 bg-[#8B4A3D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#723B30] transition-colors"
             >
               {isSaving ? "Deactivating…" : "Deactivate"}
             </button>
@@ -362,13 +362,13 @@ function DeactivateStaffModal({ member, onClose, onDeactivated }) {
 function TextField({ label, type = "text", value, onChange }) {
   return (
     <div className="mb-4">
-      <label className="block text-[12px] text-[#5C7080] mb-1.5">{label}</label>
+      <label className="block text-[12px] text-[#53657E] mb-1.5">{label}</label>
       <input
         type={type}
         value={value}
         onChange={onChange}
         required
-        className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+        className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]"
       />
     </div>
   );

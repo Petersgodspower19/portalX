@@ -28,19 +28,19 @@ function SchoolProfileContent() {
         <div>
             <div className="mb-1.5">
                 <h1 className="font-serif text-[27px] font-medium">School profile</h1>
-                <p className="text-[12.5px] text-[#5C7080] mt-1">
+                <p className="text-[12.5px] text-[#53657E] mt-1">
                     School-wide configuration — principal only
                 </p>
             </div>
 
-            <div className="border-b border-[#DCD5C7] mt-5 mb-6 flex gap-1">
+            <div className="border-b border-[#DFE6EF] mt-5 mb-6 flex gap-1">
                 {TABS.map((t) => (
                     <button
                         key={t.key}
                         onClick={() => setTab(t.key)}
                         className={`text-[13px] font-medium px-3.5 py-2.5 border-b-2 -mb-px ${tab === t.key
-                            ? "border-[#9C7A3C] text-[#1C2630]"
-                            : "border-transparent text-[#8A98A3]"
+                            ? "border-[#2563EB] text-[#172B4D]"
+                            : "border-transparent text-[#697A91]"
                             }`}
                     >
                         {t.label}
@@ -245,7 +245,7 @@ function GradingSchemeSection() {
                         <thead>
                             <tr>
                                 {["Grade", "Min score", "Max score", ""].map((h) => (
-                                    <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
+                                    <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium pb-2.5 border-b border-[#DFE6EF]">
                                         {h}
                                     </th>
                                 ))}
@@ -254,16 +254,16 @@ function GradingSchemeSection() {
                         <tbody>
                             {bands.map((band, i) => (
                                 <tr key={i}>
-                                    <td className="py-2.5 border-b border-[#DCD5C7] pr-3">
+                                    <td className="py-2.5 border-b border-[#DFE6EF] pr-3">
                                         <InlineInput value={band.grade} onChange={updateBand(i, "grade")} disabled={!isEditing} width="w-16" />
                                     </td>
-                                    <td className="py-2.5 border-b border-[#DCD5C7] pr-3">
+                                    <td className="py-2.5 border-b border-[#DFE6EF] pr-3">
                                         <InlineInput type="number" value={band.min_score} onChange={updateBand(i, "min_score")} disabled={!isEditing} />
                                     </td>
-                                    <td className="py-2.5 border-b border-[#DCD5C7] pr-3">
+                                    <td className="py-2.5 border-b border-[#DFE6EF] pr-3">
                                         <InlineInput type="number" value={band.max_score} onChange={updateBand(i, "max_score")} disabled={!isEditing} />
                                     </td>
-                                    <td className="py-2.5 border-b border-[#DCD5C7] text-right">
+                                    <td className="py-2.5 border-b border-[#DFE6EF] text-right">
                                         {isEditing && (
                                             <button type="button" onClick={() => removeBand(i)} className="text-[11.5px] text-[#8B4A3D]">
                                                 Remove
@@ -279,7 +279,7 @@ function GradingSchemeSection() {
                         <button
                             type="button"
                             onClick={addBand}
-                            className="flex items-center gap-1.5 text-[12.5px] font-medium text-[#9C7A3C] mb-5"
+                            className="flex items-center gap-1.5 text-[12.5px] font-medium text-[#2563EB] mb-5"
                         >
                             <LuPlus size={13} /> Add band
                         </button>
@@ -397,7 +397,7 @@ function SessionsTermsSection() {
                     <thead>
                         <tr>
                             {["Session", "Year", "Status", ""].map((h) => (
-                                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
+                                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium pb-2.5 border-b border-[#DFE6EF]">
                                     {h}
                                 </th>
                             ))}
@@ -410,22 +410,22 @@ function SessionsTermsSection() {
                                 onClick={() => setSelectedSessionId(s.id)}
                                 className={`cursor-pointer ${selectedSessionId === s.id ? "bg-[#FAEEDA]/40" : ""}`}
                             >
-                                <td className="py-2.5 border-b border-[#DCD5C7] text-[13.5px]">{s.name}</td>
-                                <td className="py-2.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">{s.year}</td>
-                                <td className="py-2.5 border-b border-[#DCD5C7]">
+                                <td className="py-2.5 border-b border-[#DFE6EF] text-[13.5px]">{s.name}</td>
+                                <td className="py-2.5 border-b border-[#DFE6EF] text-[12.5px] font-mono text-[#53657E]">{s.year}</td>
+                                <td className="py-2.5 border-b border-[#DFE6EF]">
                                     {s.is_current ? (
                                         <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-[#EAEFE6] text-[#5E7A5E] rounded-[3px] px-2 py-0.5">
                                             <LuCheck size={11} /> Current
                                         </span>
                                     ) : (
-                                        <span className="text-[11.5px] text-[#8A98A3]">Inactive</span>
+                                        <span className="text-[11.5px] text-[#697A91]">Inactive</span>
                                     )}
                                 </td>
-                                <td className="py-2.5 border-b border-[#DCD5C7] text-right">
+                                <td className="py-2.5 border-b border-[#DFE6EF] text-right">
                                     {!s.is_current && (
                                         <button
                                             onClick={(e) => { e.stopPropagation(); handleSetSessionCurrent(s.id); }}
-                                            className="text-[12px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-2.5 py-1"
+                                            className="text-[12px] font-medium border border-[#DFE6EF] bg-white rounded-[3px] px-2.5 py-1"
                                         >
                                             Set current
                                         </button>
@@ -442,7 +442,7 @@ function SessionsTermsSection() {
                     <button
                         type="submit"
                         disabled={creatingSession}
-                        className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#1C2630] text-[#FAF8F4] rounded-[4px] px-3.5 py-2.5 disabled:opacity-60"
+                        className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#172B4D] text-[#F4F7FB] rounded-[4px] px-3.5 py-2.5 disabled:opacity-60"
                     >
                         <LuPlus size={13} /> {creatingSession ? "Adding…" : "Add session"}
                     </button>
@@ -462,7 +462,7 @@ function SessionsTermsSection() {
                             <thead>
                                 <tr>
                                     {["Term", "Dates", "Status", ""].map((h) => (
-                                        <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium pb-2.5 border-b border-[#DCD5C7]">
+                                        <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium pb-2.5 border-b border-[#DFE6EF]">
                                             {h}
                                         </th>
                                     ))}
@@ -471,24 +471,24 @@ function SessionsTermsSection() {
                             <tbody>
                                 {terms.map((t) => (
                                     <tr key={t.id}>
-                                        <td className="py-2.5 border-b border-[#DCD5C7] text-[13.5px]">{t.name}</td>
-                                        <td className="py-2.5 border-b border-[#DCD5C7] text-[12.5px] font-mono text-[#5C7080]">
+                                        <td className="py-2.5 border-b border-[#DFE6EF] text-[13.5px]">{t.name}</td>
+                                        <td className="py-2.5 border-b border-[#DFE6EF] text-[12.5px] font-mono text-[#53657E]">
                                             {t.start_date} → {t.end_date}
                                         </td>
-                                        <td className="py-2.5 border-b border-[#DCD5C7]">
+                                        <td className="py-2.5 border-b border-[#DFE6EF]">
                                             {t.is_current ? (
                                                 <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-[#EAEFE6] text-[#5E7A5E] rounded-[3px] px-2 py-0.5">
                                                     <LuCheck size={11} /> Current
                                                 </span>
                                             ) : (
-                                                <span className="text-[11.5px] text-[#8A98A3]">Inactive</span>
+                                                <span className="text-[11.5px] text-[#697A91]">Inactive</span>
                                             )}
                                         </td>
-                                        <td className="py-2.5 border-b border-[#DCD5C7] text-right">
+                                        <td className="py-2.5 border-b border-[#DFE6EF] text-right">
                                             {!t.is_current && (
                                                 <button
                                                     onClick={() => handleSetTermCurrent(t.id)}
-                                                    className="text-[12px] font-medium border border-[#DCD5C7] bg-white rounded-[3px] px-2.5 py-1"
+                                                    className="text-[12px] font-medium border border-[#DFE6EF] bg-white rounded-[3px] px-2.5 py-1"
                                                 >
                                                     Set current
                                                 </button>
@@ -507,7 +507,7 @@ function SessionsTermsSection() {
                             <button
                                 type="submit"
                                 disabled={creatingTerm || !selectedSessionId}
-                                className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#1C2630] text-[#FAF8F4] rounded-[4px] px-3.5 py-2.5 disabled:opacity-60"
+                                className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#172B4D] text-[#F4F7FB] rounded-[4px] px-3.5 py-2.5 disabled:opacity-60"
                             >
                                 <LuPlus size={13} /> {creatingTerm ? "Adding…" : "Add term"}
                             </button>
@@ -526,7 +526,7 @@ function SectionHead({ title, sub, action }) {
         <div className="flex justify-between items-end mb-4">
             <div>
                 <h2 className="font-serif text-[18px] font-medium">{title}</h2>
-                {sub && <p className="text-[12px] text-[#8A98A3] mt-0.5">{sub}</p>}
+                {sub && <p className="text-[12px] text-[#697A91] mt-0.5">{sub}</p>}
             </div>
             {action}
         </div>
@@ -535,7 +535,7 @@ function SectionHead({ title, sub, action }) {
 
 function Card({ children, wide }) {
     return (
-        <div className={`bg-white border border-[#DCD5C7] rounded-[6px] px-7 py-7 mb-9 ${wide ? "" : "max-w-[560px]"}`}>
+        <div className={`bg-white border border-[#DFE6EF] rounded-[6px] px-7 py-7 mb-9 ${wide ? "" : "max-w-[560px]"}`}>
             {children}
         </div>
     );
@@ -543,7 +543,7 @@ function Card({ children, wide }) {
 
 function EditButton({ onClick }) {
     return (
-        <button onClick={onClick} className="flex items-center gap-1.5 text-[12.5px] font-medium border border-[#DCD5C7] bg-white rounded-[4px] px-3.5 py-2">
+        <button onClick={onClick} className="flex items-center gap-1.5 text-[12.5px] font-medium border border-[#DFE6EF] bg-white rounded-[4px] px-3.5 py-2">
             <LuPencil size={13} /> Edit
         </button>
     );
@@ -552,10 +552,10 @@ function EditButton({ onClick }) {
 function SaveCancelRow({ isSaving, onCancel }) {
     return (
         <div className="flex gap-2 mt-2">
-            <button type="submit" disabled={isSaving} className="bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] px-4 py-2.5 disabled:opacity-60">
+            <button type="submit" disabled={isSaving} className="bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] px-4 py-2.5 disabled:opacity-60">
                 {isSaving ? "Saving…" : "Save changes"}
             </button>
-            <button type="button" onClick={onCancel} className="text-[13.5px] font-medium border border-[#DCD5C7] bg-white rounded-[4px] px-4 py-2.5">
+            <button type="button" onClick={onCancel} className="text-[13.5px] font-medium border border-[#DFE6EF] bg-white rounded-[4px] px-4 py-2.5">
                 Cancel
             </button>
         </div>
@@ -563,21 +563,21 @@ function SaveCancelRow({ isSaving, onCancel }) {
 }
 
 function Loading({ text }) {
-    return <p className="text-[13.5px] text-[#5C7080]">{text}</p>;
+    return <p className="text-[13.5px] text-[#53657E]">{text}</p>;
 }
 
 function Field({ label, icon: Icon, type = "text", value, onChange, disabled }) {
     return (
         <div className="mb-4">
-            <label className="block text-[12px] text-[#5C7080] mb-1.5">{label}</label>
-            <div className={`flex items-center gap-2 border rounded-[4px] px-3 py-2.5 ${disabled ? "border-[#DCD5C7] bg-[#FAF8F4]" : "border-[#DCD5C7] focus-within:border-[#9C7A3C]"}`}>
-                <Icon size={15} className="text-[#8A98A3] shrink-0" />
+            <label className="block text-[12px] text-[#53657E] mb-1.5">{label}</label>
+            <div className={`flex items-center gap-2 border rounded-[4px] px-3 py-2.5 ${disabled ? "border-[#DFE6EF] bg-[#F4F7FB]" : "border-[#DFE6EF] focus-within:border-[#2563EB]"}`}>
+                <Icon size={15} className="text-[#697A91] shrink-0" />
                 <input
                     type={type}
                     value={value || ""}
                     onChange={onChange}
                     disabled={disabled}
-                    className="w-full text-[13.5px] outline-none bg-transparent disabled:text-[#5C7080]"
+                    className="w-full text-[13.5px] outline-none bg-transparent disabled:text-[#53657E]"
                 />
             </div>
         </div>
@@ -587,13 +587,13 @@ function Field({ label, icon: Icon, type = "text", value, onChange, disabled }) 
 function NumberField({ label, value, onChange, disabled }) {
     return (
         <div>
-            <label className="block text-[12px] text-[#5C7080] mb-1.5">{label}</label>
+            <label className="block text-[12px] text-[#53657E] mb-1.5">{label}</label>
             <input
                 type="number"
                 value={value}
                 onChange={onChange}
                 disabled={disabled}
-                className={`w-full text-[13.5px] font-mono border rounded-[4px] px-3 py-2.5 outline-none ${disabled ? "border-[#DCD5C7] bg-[#FAF8F4] text-[#5C7080]" : "border-[#DCD5C7] focus:border-[#9C7A3C]"}`}
+                className={`w-full text-[13.5px] font-mono border rounded-[4px] px-3 py-2.5 outline-none ${disabled ? "border-[#DFE6EF] bg-[#F4F7FB] text-[#53657E]" : "border-[#DFE6EF] focus:border-[#2563EB]"}`}
             />
         </div>
     );
@@ -606,7 +606,7 @@ function InlineInput({ type = "text", value, onChange, disabled, width = "w-20" 
             value={value ?? ""}
             onChange={onChange}
             disabled={disabled}
-            className={`${width} text-[13px] font-mono border rounded-[3px] px-2 py-1.5 outline-none ${disabled ? "border-transparent bg-transparent text-[#1C2630]" : "border-[#DCD5C7] focus:border-[#9C7A3C]"}`}
+            className={`${width} text-[13px] font-mono border rounded-[3px] px-2 py-1.5 outline-none ${disabled ? "border-transparent bg-transparent text-[#172B4D]" : "border-[#DFE6EF] focus:border-[#2563EB]"}`}
         />
     );
 }
@@ -614,13 +614,13 @@ function InlineInput({ type = "text", value, onChange, disabled, width = "w-20" 
 function InlineLabelInput({ label, type = "text", placeholder, value, onChange, width = "w-32" }) {
     return (
         <div>
-            <label className="block text-[11px] text-[#8A98A3] mb-1">{label}</label>
+            <label className="block text-[11px] text-[#697A91] mb-1">{label}</label>
             <input
                 type={type}
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
-                className={`${width} text-[13px] border border-[#DCD5C7] rounded-[4px] px-2.5 py-2 outline-none focus:border-[#9C7A3C]`}
+                className={`${width} text-[13px] border border-[#DFE6EF] rounded-[4px] px-2.5 py-2 outline-none focus:border-[#2563EB]`}
             />
         </div>
     );

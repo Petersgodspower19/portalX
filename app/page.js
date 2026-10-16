@@ -27,13 +27,13 @@ export default function HomePage() {
   }, [user, isLoading, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAF8F4]">
+    <div className="min-h-screen flex items-center justify-center bg-[#F4F7FB]">
       <div className="flex flex-col items-center gap-3">
         <LuLoader
           size={32}
-          className="animate-spin text-[#9C7A3C]"
+          className="animate-spin text-[#2563EB]"
         />
-        <p className="text-sm text-[#5C7080]">
+        <p className="text-sm text-[#53657E]">
          PortalX is Loading..
         </p>
       </div>

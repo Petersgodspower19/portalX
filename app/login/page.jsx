@@ -45,24 +45,36 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F4] flex items-center justify-center px-6">
-      <div className="w-full max-w-[400px]">
+    <div className="auth-page min-h-screen bg-[#F4F7FB] flex items-center justify-center px-6">
+      <aside className="auth-story">
+        <div className="auth-story-brand">PortalX <span>School management</span></div>
+        <div className="auth-story-content">
+          <span className="auth-eyebrow">Tarepet Montessori</span>
+          <h1>A clearer view.<br />A better school day.</h1>
+          <p>One workspace for the people, progress, and everyday details that keep your school moving.</p>
+          <div className="auth-features"><span>Academics</span><span>Administration</span><span>Student records</span></div>
+        </div>
+        <div className="auth-story-footer">Built around your school community.</div>
+      </aside>
+      <div className="auth-form-area">
+      <div className="auth-form-container w-full max-w-[400px]">
         <div className="text-center mb-8">
-          <div className="font-serif text-[24px] font-semibold text-[#1C2630]">PortalX</div>
-          <div className="text-[11px] uppercase tracking-[0.08em] text-[#9C7A3C] mt-1">
+          <div className="font-serif text-[24px] font-semibold text-[#172B4D]">PortalX</div>
+          <div className="text-[11px] uppercase tracking-[0.08em] text-[#2563EB] mt-1">
             Tarepet Montessori
           </div>
         </div>
 
-        <div className="bg-white border border-[#DCD5C7] rounded-[6px] overflow-hidden">
+        <div className="auth-intro"><h2>Welcome back</h2><p>Sign in to your school workspace.</p></div>
+        <div className="bg-white border border-[#DFE6EF] rounded-[6px] overflow-hidden">
           <div className="grid grid-cols-2">
             <button
               type="button"
               onClick={() => { setTab("staff"); setIdentifier(""); }}
               className={`py-3 text-[13.5px] font-medium border-b-2 ${
                 tab === "staff"
-                  ? "border-[#9C7A3C] text-[#1C2630]"
-                  : "border-transparent text-[#8A98A3]"
+                  ? "border-[#2563EB] text-[#172B4D]"
+                  : "border-transparent text-[#697A91]"
               }`}
             >
               Staff
@@ -72,8 +84,8 @@ export default function LoginPage() {
               onClick={() => { setTab("student"); setIdentifier(""); }}
               className={`py-3 text-[13.5px] font-medium border-b-2 ${
                 tab === "student"
-                  ? "border-[#9C7A3C] text-[#1C2630]"
-                  : "border-transparent text-[#8A98A3]"
+                  ? "border-[#2563EB] text-[#172B4D]"
+                  : "border-transparent text-[#697A91]"
               }`}
             >
               Student
@@ -110,7 +122,7 @@ export default function LoginPage() {
             />
 
             <div className="flex justify-end mb-5">
-              <a href="#" className="text-[12px] text-[#9C7A3C]">
+              <a href="#" className="text-[12px] text-[#2563EB]">
                 Forgot password?
               </a>
             </div>
@@ -118,16 +130,17 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#1C2630] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60"
+              className="w-full bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60"
             >
               {isSubmitting ? "Signing in…" : "Sign in"}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-[12px] text-[#8A98A3] mt-6">
+        <p className="text-center text-[12px] text-[#697A91] mt-6">
           Having trouble signing in? Contact your school administrator.
         </p>
+      </div>
       </div>
     </div>
   );
@@ -136,15 +149,15 @@ export default function LoginPage() {
 function Field({ label, icon: Icon, type, placeholder, value, onChange }) {
   return (
     <div className="mb-4">
-      <label className="block text-[12px] text-[#5C7080] mb-1.5">{label}</label>
-      <div className="flex items-center gap-2 border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 focus-within:border-[#9C7A3C]">
-        <Icon size={15} className="text-[#8A98A3] shrink-0" />
+      <label className="block text-[12px] text-[#53657E] mb-1.5">{label}</label>
+      <div className="flex items-center gap-2 border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 focus-within:border-[#2563EB]">
+        <Icon size={15} className="text-[#697A91] shrink-0" />
         <input
           type={type}
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full text-[13.5px] outline-none bg-transparent placeholder:text-[#B8B2A5]"
+          className="w-full text-[13.5px] outline-none bg-transparent placeholder:text-[#94A3B8]"
         />
       </div>
     </div>

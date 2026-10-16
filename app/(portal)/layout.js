@@ -54,18 +54,19 @@ function Sidenav() {
     : "";
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-[248px] bg-[#1C2630] text-[#FAF8F4] flex flex-col py-7 px-6 z-50">
-      <div className="mb-9">
+    <aside className="portal-sidebar fixed left-0 top-0 h-full w-[248px] bg-[#172B4D] text-[#F4F7FB] flex flex-col py-7 px-6 z-50">
+      <div className="portal-brand mb-9">
+        <div className="brand-symbol" aria-hidden="true"><LuGraduationCap size={23} /></div>
         <div className="font-serif text-[21px] font-semibold tracking-tight">PortalX</div>
-        <div className="text-[11px] uppercase tracking-[0.08em] text-[#C9B68A] mt-1">
+        <div className="text-[11px] uppercase tracking-[0.08em] text-[#93B4F4] mt-1">
           Tarepet Montessori
         </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]">
+      <nav aria-label="Main navigation" className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]">
         {navGroups.map((group) => (
           <div key={group.label} className="mb-1">
-            <div className="text-[10px] uppercase tracking-[0.1em] text-[#6E7A85] mt-5 mb-2.5">
+            <div className="text-[10px] uppercase tracking-[0.1em] text-[#8396B3] mt-5 mb-2.5">
               {group.label}
             </div>
             {group.links.map((link) => {
@@ -75,10 +76,11 @@ function Sidenav() {
                 <Link
                   key={link.route}
                   href={link.route}
+                  aria-current={isActive ? "page" : undefined}
                   className={`flex items-center gap-2.5 px-2.5 py-2 rounded-[3px] text-[13.5px] border-l-2 ${
                     isActive
-                      ? "bg-[#9C7A3C]/15 text-[#F2E9D8] border-[#9C7A3C]"
-                      : "text-[#C7CDD3] border-transparent hover:bg-white/5"
+                      ? "bg-[#2563EB]/15 text-[#EFF5FF] border-[#2563EB]"
+                      : "text-[#B5C3D8] border-transparent hover:bg-white/5"
                   }`}
                 >
                   <Icon size={16} className="shrink-0" />
@@ -90,29 +92,38 @@ function Sidenav() {
         ))}
       </nav>
 
-      <div className="flex items-center gap-2.5 pt-5 border-t border-[#2C3744]">
-        <div className="w-[34px] h-[34px] rounded-full bg-[#9C7A3C] text-[#1C2630] flex items-center justify-center font-serif font-semibold text-sm shrink-0">
+      <div className="flex items-center gap-2.5 pt-5 border-t border-[#2B3E5D]">
+        <div className="w-[34px] h-[34px] rounded-full bg-[#2563EB] text-[#172B4D] flex items-center justify-center font-serif font-semibold text-sm shrink-0">
           {initials}
         </div>
         <div className="min-w-0">
-          <div className="text-[13px] text-[#EDEAE3] truncate">
+          <div className="text-[13px] text-[#F0F4FB] truncate">
             {user?.first_name} {user?.last_name}
           </div>
-          <div className="text-[11px] uppercase tracking-[0.05em] text-[#8C97A1]">
+          <div className="text-[11px] uppercase tracking-[0.05em] text-[#9AAEC9]">
             {user?.role?.replace("_", " ")}
           </div>
         </div>
-        <LuChevronDown size={18} className="ml-auto shrink-0 text-[#8C97A1] cursor-pointer" />
+        <LuChevronDown size={18} className="ml-auto shrink-0 text-[#9AAEC9] cursor-pointer" />
       </div>
     </aside>
   );
 }
 
 export default function DashboardLayout({ children }) {
+  const pathname = usePathname();
+  const activeLink = navGroups.flatMap((group) => group.links).find((link) => pathname === link.route || pathname.startsWith(link.route + "/"));
   return (
-    <div className="min-h-screen bg-[#FAF8F4] text-[#1C2630]">
+    <div className="portal-shell min-h-screen bg-[#F4F7FB] text-[#172B4D]">
       <Sidenav />
-      <main className="ml-[248px] px-11 py-8 max-w-[1180px]">{children}</main>
+      <div className="portal-workspace">
+        <header className="workspace-header">
+          <div className="workspace-breadcrumb">Workspace <span aria-hidden="true">/</span> <strong>{pathname === "/change-password" ? "Account settings" : activeLink?.title ?? "Portal"}</strong></div>
+          <span className="workspace-school"><LuBuilding2 size={15} /> Tarepet Montessori</span>
+        </header>
+        <main className="portal-main">{children}</main>
+        <footer className="workspace-footer"><span>PortalX</span> School administration, thoughtfully organised.</footer>
+      </div>
     </div>
   );
 }

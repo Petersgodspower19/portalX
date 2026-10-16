@@ -154,8 +154,8 @@ function StaffProfileContent() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px]">
-        <LuLoader className="animate-spin text-[#9C7A3C]" size={36} />
-        <p className="text-[13.5px] text-[#5C7080] mt-3">Fetching staff details...</p>
+        <LuLoader className="animate-spin text-[#2563EB]" size={36} />
+        <p className="text-[13.5px] text-[#53657E] mt-3">Fetching staff details...</p>
       </div>
     );
   }
@@ -163,11 +163,11 @@ function StaffProfileContent() {
   if (!staff) {
     return (
       <div className="text-center py-12">
-        <h2 className="font-serif text-[20px] font-medium text-[#1C2630] mb-2">Staff Member Not Found</h2>
-        <p className="text-[13.5px] text-[#5C7080] mb-6">The requested staff record does not exist or you lack permission to view it.</p>
+        <h2 className="font-serif text-[20px] font-medium text-[#172B4D] mb-2">Staff Member Not Found</h2>
+        <p className="text-[13.5px] text-[#53657E] mb-6">The requested staff record does not exist or you lack permission to view it.</p>
         <Link
           href="/staff"
-          className="inline-flex items-center gap-1.5 text-[12.5px] font-medium bg-[#1C2630] text-[#FAF8F4] rounded-[4px] px-4 py-2.5"
+          className="inline-flex items-center gap-1.5 text-[12.5px] font-medium bg-[#172B4D] text-[#F4F7FB] rounded-[4px] px-4 py-2.5"
         >
           <LuArrowLeft size={14} /> Back to staff directory
         </Link>
@@ -176,30 +176,31 @@ function StaffProfileContent() {
   }
 
   return (
-    <div>
+    <div className="staff-detail">
       {/* Back Link */}
       <div className="mb-6">
         <Link
           href="/staff"
-          className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[#5C7080] hover:text-[#1C2630] transition-colors"
+          className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[#53657E] hover:text-[#172B4D] transition-colors"
         >
           <LuArrowLeft size={14} /> Back to staff
         </Link>
       </div>
 
       {/* Main Profile Card Header */}
-      <div className="bg-white border border-[#DCD5C7] rounded-[6px] p-6 mb-6 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+      <div className="profile-hero staff-hero bg-white border border-[#DFE6EF] rounded-[6px] p-6 mb-6 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
         <div className="flex items-center gap-5">
           {/* Visual Avatar */}
-          <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#9C7A3C] to-[#C9B68A] flex items-center justify-center text-white text-[22px] font-semibold tracking-wider font-serif shadow-sm">
+          <div className="profile-avatar w-16 h-16 rounded-full bg-gradient-to-tr from-[#2563EB] to-[#93B4F4] flex items-center justify-center text-white text-[22px] font-semibold tracking-wider font-serif shadow-sm">
             {getInitials()}
           </div>
           <div>
-            <h1 className="font-serif text-[24px] font-medium text-[#1C2630]">
+            <p className="profile-eyebrow">Staff profile</p>
+            <h1 className="font-serif text-[24px] font-medium text-[#172B4D]">
               {staff.first_name} {staff.last_name}
             </h1>
             <div className="flex flex-wrap gap-2 items-center mt-1.5">
-              <span className="text-[12px] bg-gray-100 text-[#5C7080] rounded-[3px] px-2 py-0.5 capitalize font-medium">
+              <span className="text-[12px] bg-gray-100 text-[#53657E] rounded-[3px] px-2 py-0.5 capitalize font-medium">
                 {staff.role?.replace("_", " ")}
               </span>
               <span
@@ -218,7 +219,7 @@ function StaffProfileContent() {
           {!isEditing && (
             <button
               onClick={handleEditToggle}
-              className="flex items-center gap-1.5 text-[12.5px] font-medium border border-[#DCD5C7] bg-white text-[#1C2630] hover:bg-gray-50 rounded-[4px] px-4 py-2"
+              className="flex items-center gap-1.5 text-[12.5px] font-medium border border-[#DFE6EF] bg-white text-[#172B4D] hover:bg-gray-50 rounded-[4px] px-4 py-2"
             >
               <LuPencil size={14} /> Edit details
             </button>
@@ -234,7 +235,7 @@ function StaffProfileContent() {
           ) : (
             <button
               onClick={handleReactivate}
-              className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#1C2630] text-[#FAF8F4] hover:bg-[#2b3947] rounded-[4px] px-4 py-2"
+              className="flex items-center gap-1.5 text-[12.5px] font-medium bg-[#172B4D] text-[#F4F7FB] hover:bg-[#2b3947] rounded-[4px] px-4 py-2"
             >
               <LuUserCheck size={14} /> Reactivate account
             </button>
@@ -243,11 +244,11 @@ function StaffProfileContent() {
       </div>
 
       {/* Details Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="staff-record-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Core Details (Left 2 Columns) */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white border border-[#DCD5C7] rounded-[6px] p-6">
-            <h2 className="font-serif text-[17px] font-medium text-[#1C2630] mb-5">
+          <div className="bg-white border border-[#DFE6EF] rounded-[6px] p-6">
+            <h2 className="font-serif text-[17px] font-medium text-[#172B4D] mb-5">
               Personal & System Profile
             </h2>
 
@@ -255,7 +256,7 @@ function StaffProfileContent() {
               <form onSubmit={handleUpdateDetails} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[12px] text-[#5C7080] mb-1.5 font-medium">
+                    <label className="block text-[12px] text-[#53657E] mb-1.5 font-medium">
                       First Name
                     </label>
                     <input
@@ -263,11 +264,11 @@ function StaffProfileContent() {
                       value={editForm.first_name}
                       onChange={handleInputChange("first_name")}
                       required
-                      className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+                      className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[12px] text-[#5C7080] mb-1.5 font-medium">
+                    <label className="block text-[12px] text-[#53657E] mb-1.5 font-medium">
                       Last Name
                     </label>
                     <input
@@ -275,13 +276,13 @@ function StaffProfileContent() {
                       value={editForm.last_name}
                       onChange={handleInputChange("last_name")}
                       required
-                      className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+                      className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[12px] text-[#5C7080] mb-1.5 font-medium">
+                  <label className="block text-[12px] text-[#53657E] mb-1.5 font-medium">
                     Phone Number
                   </label>
                   <input
@@ -289,7 +290,7 @@ function StaffProfileContent() {
                     value={editForm.phone}
                     onChange={handleInputChange("phone")}
                     required
-                    className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C]"
+                    className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]"
                   />
                 </div>
 
@@ -297,38 +298,38 @@ function StaffProfileContent() {
                 <div className="pt-3 opacity-60 pointer-events-none">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-[12px] text-[#5C7080] mb-1">Role (Cannot edit here)</label>
+                      <label className="block text-[12px] text-[#53657E] mb-1">Role (Cannot edit here)</label>
                       <input
                         type="text"
                         disabled
                         value={staff.role?.replace("_", " ") || ""}
-                        className="w-full text-[13.5px] bg-[#FAF8F4] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 capitalize"
+                        className="w-full text-[13.5px] bg-[#F4F7FB] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 capitalize"
                       />
                     </div>
                     <div>
-                      <label className="block text-[12px] text-[#5C7080] mb-1 font-medium">Email (Unchangeable)</label>
+                      <label className="block text-[12px] text-[#53657E] mb-1 font-medium">Email (Unchangeable)</label>
                       <input
                         type="email"
                         disabled
                         value={staff.email || ""}
-                        className="w-full text-[13.5px] bg-[#FAF8F4] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 font-mono"
+                        className="w-full text-[13.5px] bg-[#F4F7FB] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 font-mono"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-[#DCD5C7] mt-6">
+                <div className="flex justify-end gap-3 pt-4 border-t border-[#DFE6EF] mt-6">
                   <button
                     type="button"
                     onClick={handleEditToggle}
-                    className="flex items-center gap-1.5 text-[13px] font-medium border border-[#DCD5C7] text-[#5C7080] hover:bg-gray-50 rounded-[4px] px-4 py-2"
+                    className="flex items-center gap-1.5 text-[13px] font-medium border border-[#DFE6EF] text-[#53657E] hover:bg-gray-50 rounded-[4px] px-4 py-2"
                   >
                     <LuX size={14} /> Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="flex items-center gap-1.5 text-[13px] font-medium bg-[#1C2630] text-[#FAF8F4] hover:bg-[#2b3947] rounded-[4px] px-4 py-2 disabled:opacity-60"
+                    className="flex items-center gap-1.5 text-[13px] font-medium bg-[#172B4D] text-[#F4F7FB] hover:bg-[#2b3947] rounded-[4px] px-4 py-2 disabled:opacity-60"
                   >
                     {isSaving ? (
                       <>
@@ -346,18 +347,18 @@ function StaffProfileContent() {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <span className="text-[11.5px] uppercase tracking-wider text-[#8A98A3] block mb-1">
+                    <span className="text-[11.5px] uppercase tracking-wider text-[#697A91] block mb-1">
                       First Name
                     </span>
-                    <span className="text-[14.5px] text-[#1C2630] font-medium">
+                    <span className="text-[14.5px] text-[#172B4D] font-medium">
                       {staff.first_name || "—"}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[11.5px] uppercase tracking-wider text-[#8A98A3] block mb-1">
+                    <span className="text-[11.5px] uppercase tracking-wider text-[#697A91] block mb-1">
                       Last Name
                     </span>
-                    <span className="text-[14.5px] text-[#1C2630] font-medium">
+                    <span className="text-[14.5px] text-[#172B4D] font-medium">
                       {staff.last_name || "—"}
                     </span>
                   </div>
@@ -365,20 +366,20 @@ function StaffProfileContent() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-dashed border-[#E5E0D5]">
                   <div>
-                    <span className="text-[11.5px] uppercase tracking-wider text-[#8A98A3] block mb-1">
+                    <span className="text-[11.5px] uppercase tracking-wider text-[#697A91] block mb-1">
                       Email Address
                     </span>
-                    <span className="text-[14px] text-[#1C2630] font-mono flex items-center gap-1.5">
-                      <LuMail className="text-[#8A98A3]" size={14} />
+                    <span className="text-[14px] text-[#172B4D] font-mono flex items-center gap-1.5">
+                      <LuMail className="text-[#697A91]" size={14} />
                       {staff.email || "—"}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[11.5px] uppercase tracking-wider text-[#8A98A3] block mb-1">
+                    <span className="text-[11.5px] uppercase tracking-wider text-[#697A91] block mb-1">
                       Phone Number
                     </span>
-                    <span className="text-[14px] text-[#1C2630] font-mono flex items-center gap-1.5">
-                      <LuPhone className="text-[#8A98A3]" size={14} />
+                    <span className="text-[14px] text-[#172B4D] font-mono flex items-center gap-1.5">
+                      <LuPhone className="text-[#697A91]" size={14} />
                       {staff.phone || "—"}
                     </span>
                   </div>
@@ -386,20 +387,20 @@ function StaffProfileContent() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-dashed border-[#E5E0D5]">
                   <div>
-                    <span className="text-[11.5px] uppercase tracking-wider text-[#8A98A3] block mb-1">
+                    <span className="text-[11.5px] uppercase tracking-wider text-[#697A91] block mb-1">
                       Assigned Role
                     </span>
-                    <span className="text-[14px] text-[#1C2630] flex items-center gap-1.5 capitalize font-medium">
-                      <LuShield className="text-[#8A98A3]" size={14} />
+                    <span className="text-[14px] text-[#172B4D] flex items-center gap-1.5 capitalize font-medium">
+                      <LuShield className="text-[#697A91]" size={14} />
                       {staff.role?.replace("_", " ") || "—"}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[11.5px] uppercase tracking-wider text-[#8A98A3] block mb-1">
+                    <span className="text-[11.5px] uppercase tracking-wider text-[#697A91] block mb-1">
                       Account Registered
                     </span>
-                    <span className="text-[14px] text-[#1C2630] flex items-center gap-1.5">
-                      <LuCalendar className="text-[#8A98A3]" size={14} />
+                    <span className="text-[14px] text-[#172B4D] flex items-center gap-1.5">
+                      <LuCalendar className="text-[#697A91]" size={14} />
                       {staff.created_at
                         ? new Date(staff.created_at).toLocaleDateString(undefined, {
                             dateStyle: "medium",
@@ -415,21 +416,21 @@ function StaffProfileContent() {
 
         {/* Sidebar Info (Right 1 Column) */}
         <div className="space-y-6">
-          <div className="bg-[#FAF8F4] border border-[#DCD5C7] rounded-[6px] p-6">
-            <h3 className="font-serif text-[16px] font-medium text-[#1C2630] mb-4">
+          <div className="bg-[#F4F7FB] border border-[#DFE6EF] rounded-[6px] p-6">
+            <h3 className="font-serif text-[16px] font-medium text-[#172B4D] mb-4">
               System Metadata
             </h3>
-            <div className="space-y-4 text-[12.5px] text-[#5C7080]">
+            <div className="space-y-4 text-[12.5px] text-[#53657E]">
               <div>
-                <span className="text-[10px] uppercase tracking-wider text-[#8A98A3] block mb-0.5">
+                <span className="text-[10px] uppercase tracking-wider text-[#697A91] block mb-0.5">
                   Unique User ID
                 </span>
-                <span className="font-mono text-xs select-all text-[#1C2630]">
+                <span className="font-mono text-xs select-all text-[#172B4D]">
                   {staff.id}
                 </span>
               </div>
               <div className="pt-3 border-t border-[#E5E0D5]">
-                <span className="text-[10px] uppercase tracking-wider text-[#8A98A3] block mb-0.5">
+                <span className="text-[10px] uppercase tracking-wider text-[#697A91] block mb-0.5">
                   Status History
                 </span>
                 <span className="font-medium">
@@ -442,7 +443,7 @@ function StaffProfileContent() {
               </div>
               {staff.deactivated_reason && (
                 <div className="pt-3 border-t border-[#E5E0D5]">
-                  <span className="text-[10px] uppercase tracking-wider text-[#8A98A3] block mb-0.5">
+                  <span className="text-[10px] uppercase tracking-wider text-[#697A91] block mb-0.5">
                     Deactivation Reason
                   </span>
                   <p className="bg-[#F3E7E3] text-[#8B4A3D] rounded p-2 text-xs italic">
@@ -464,15 +465,15 @@ function StaffProfileContent() {
                 setShowDeactivateModal(false);
                 setDeactivateReason("");
               }}
-              className="absolute top-5 right-5 text-[#8A98A3]"
+              className="absolute top-5 right-5 text-[#697A91]"
             >
               <LuX size={18} />
             </button>
 
             <h2 className="font-serif text-[18px] font-medium mb-2">Deactivate staff member</h2>
-            <p className="text-[13px] text-[#5C7080] mb-5">
+            <p className="text-[13px] text-[#53657E] mb-5">
               Are you sure you want to deactivate{" "}
-              <span className="font-medium text-[#1C2630]">
+              <span className="font-medium text-[#172B4D]">
                 {staff.first_name} {staff.last_name}
               </span>
               ? They will no longer be able to log in to the portal.
@@ -480,7 +481,7 @@ function StaffProfileContent() {
 
             <form onSubmit={handleDeactivateSubmit}>
               <div className="mb-5">
-                <label className="block text-[12px] text-[#5C7080] mb-1.5">
+                <label className="block text-[12px] text-[#53657E] mb-1.5">
                   Reason for deactivation
                 </label>
                 <textarea
@@ -489,7 +490,7 @@ function StaffProfileContent() {
                   placeholder="e.g. Resigned, End of contract, Suspended"
                   required
                   rows={3}
-                  className="w-full text-[13.5px] border border-[#DCD5C7] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#9C7A3C] resize-none"
+                  className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB] resize-none"
                 />
               </div>
 
@@ -500,14 +501,14 @@ function StaffProfileContent() {
                     setShowDeactivateModal(false);
                     setDeactivateReason("");
                   }}
-                  className="flex-1 text-[13.5px] font-medium border border-[#DCD5C7] text-[#5C7080] rounded-[4px] py-2.5 hover:bg-gray-50 transition-colors"
+                  className="flex-1 text-[13.5px] font-medium border border-[#DFE6EF] text-[#53657E] rounded-[4px] py-2.5 hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isDeactivating}
-                  className="flex-1 bg-[#8B4A3D] text-[#FAF8F4] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#723B30] transition-colors flex items-center justify-center gap-1.5"
+                  className="flex-1 bg-[#8B4A3D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60 hover:bg-[#723B30] transition-colors flex items-center justify-center gap-1.5"
                 >
                   {isDeactivating ? (
                     <>

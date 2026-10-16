@@ -15,28 +15,29 @@ function StudentContent() {
   const initials = `${student?.first_name?.[0] ?? ""}${student?.last_name?.[0] ?? ""}`.toUpperCase()
 
   return (
-    <section>
-      <div className="flex justify-between items-end mb-1.5">
+    <section className="student-portal">
+      <div className="portal-profile-heading flex justify-between items-end mb-1.5">
         <div>
+          <p className="profile-eyebrow">Your school, at a glance</p>
           <h1 className="font-serif text-[27px] font-medium">My Portal</h1>
-          <p className="text-[12.5px] text-[#5C7080] mt-1">
+          <p className="text-[12.5px] text-[#53657E] mt-1">
             {student?.class_info?.full_name ?? "—"}
           </p>
         </div>
-        <div className="flex items-center gap-2.5 border border-[#DCD5C7] rounded-[4px] px-3 py-2 bg-white">
-          <div className="bg-[#9C7A3C] h-7 w-7 rounded-full flex items-center justify-center text-[#1C2630] text-[11px] font-semibold shrink-0">
+        <div className="flex items-center gap-2.5 border border-[#DFE6EF] rounded-[4px] px-3 py-2 bg-white">
+          <div className="bg-[#2563EB] h-7 w-7 rounded-full flex items-center justify-center text-[#172B4D] text-[11px] font-semibold shrink-0">
             {initials}
           </div>
           <div className="text-right">
-            <p className="text-[13px] font-medium text-[#1C2630]">
+            <p className="text-[13px] font-medium text-[#172B4D]">
               {student?.full_name ?? `${user?.first_name ?? ""} ${user?.last_name ?? ""}`}
             </p>
-            <p className="font-mono text-[11px] text-[#5C7080]">{student?.reg_number ?? "—"}</p>
+            <p className="font-mono text-[11px] text-[#53657E]">{student?.reg_number ?? "—"}</p>
           </div>
         </div>
       </div>
 
-      <div className="border-b border-[#DCD5C7] mt-5 mb-6 flex gap-1">
+      <div className="profile-tabs border-b border-[#DFE6EF] mt-5 mb-6 flex gap-1" role="group" aria-label="Portal sections">
         {[
           { key: "profile", label: "Profile" },
           { key: "results", label: "Results" },
@@ -44,9 +45,10 @@ function StudentContent() {
         ].map((t) => (
           <button
             key={t.key}
+            aria-pressed={tab === t.key}
             onClick={() => setTab(t.key)}
             className={`text-[13px] font-medium px-3.5 py-2.5 border-b-2 -mb-px ${
-              tab === t.key ? "border-[#9C7A3C] text-[#1C2630]" : "border-transparent text-[#8A98A3]"
+              tab === t.key ? "border-[#2563EB] text-[#172B4D]" : "border-transparent text-[#697A91]"
             }`}
           >
             {t.label}
@@ -69,25 +71,26 @@ function ProfileTab({ student, isLoading }) {
     return (
       <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-14 bg-[#E8E3DA] rounded-[4px] animate-pulse" />
+          <div key={i} className="h-14 bg-[#E6ECF4] rounded-[4px] animate-pulse" />
         ))}
       </div>
     )
   }
 
   return (
-    <div className="space-y-5 max-w-[720px]">
-      <div className="bg-white border border-[#DCD5C7] rounded-[6px] px-6 py-5">
+    <div className="personal-profile space-y-5">
+      <div className="profile-hero bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5">
         <div className="flex items-center gap-5">
-          <div className="w-14 h-14 rounded-full bg-[#9C7A3C] text-[#1C2630] flex items-center justify-center font-serif font-semibold text-[20px] shrink-0">
+          <div className="profile-avatar w-14 h-14 rounded-full bg-[#2563EB] text-[#172B4D] flex items-center justify-center font-serif font-semibold text-[20px] shrink-0">
             {`${student?.first_name?.[0] ?? ""}${student?.last_name?.[0] ?? ""}`.toUpperCase()}
           </div>
           <div>
+            <p className="profile-eyebrow">Student profile</p>
             <h2 className="font-serif text-[22px] font-medium leading-tight">{student?.full_name ?? "—"}</h2>
             <div className="flex items-center gap-3 mt-1 flex-wrap">
-              <span className="font-mono text-[12.5px] text-[#5C7080]">{student?.reg_number ?? "—"}</span>
-              <span className="text-[#DCD5C7]">·</span>
-              <span className="text-[12.5px] text-[#5C7080]">{student?.class_info?.full_name ?? "—"}</span>
+              <span className="font-mono text-[12.5px] text-[#53657E]">{student?.reg_number ?? "—"}</span>
+              <span className="text-[#DFE6EF]">·</span>
+              <span className="text-[12.5px] text-[#53657E]">{student?.class_info?.full_name ?? "—"}</span>
               <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 ${
                 student?.is_active ? "bg-[#EAEFE6] text-[#5E7A5E]" : "bg-[#F3E7E3] text-[#8B4A3D]"
               }`}>
@@ -99,8 +102,8 @@ function ProfileTab({ student, isLoading }) {
       </div>
 
       <div className="grid grid-cols-2 gap-5">
-        <div className="bg-white border border-[#DCD5C7] rounded-[6px] px-6 py-5">
-          <p className="text-[11px] uppercase tracking-[0.07em] text-[#8A98A3] mb-4">Personal details</p>
+        <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5">
+          <p className="text-[11px] uppercase tracking-[0.07em] text-[#697A91] mb-4">Personal details</p>
           <div className="space-y-4">
             <Row label="First name" value={student?.first_name} />
             <Row label="Last name" value={student?.last_name} />
@@ -109,8 +112,8 @@ function ProfileTab({ student, isLoading }) {
           </div>
         </div>
 
-        <div className="bg-white border border-[#DCD5C7] rounded-[6px] px-6 py-5">
-          <p className="text-[11px] uppercase tracking-[0.07em] text-[#8A98A3] mb-4">Class</p>
+        <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5">
+          <p className="text-[11px] uppercase tracking-[0.07em] text-[#697A91] mb-4">Class</p>
           <div className="space-y-4">
             <Row label="Class" value={student?.class_info?.name} />
             <Row label="Arm" value={student?.class_info?.arm} />
@@ -119,8 +122,8 @@ function ProfileTab({ student, isLoading }) {
           </div>
         </div>
 
-        <div className="bg-white border border-[#DCD5C7] rounded-[6px] px-6 py-5 col-span-2">
-          <p className="text-[11px] uppercase tracking-[0.07em] text-[#8A98A3] mb-4">Guardian details</p>
+        <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5 col-span-2">
+          <p className="text-[11px] uppercase tracking-[0.07em] text-[#697A91] mb-4">Guardian details</p>
           <div className="grid grid-cols-3 gap-6">
             <Row label="Name" value={student?.guardian_name} />
             <Row label="Phone" value={student?.guardian_phone} mono />
@@ -144,7 +147,7 @@ function FeesTab({ invoices, isLoading, term }) {
     return (
       <div className="space-y-3 max-w-[720px]">
         {[1, 2].map((i) => (
-          <div key={i} className="h-16 bg-[#E8E3DA] rounded-[4px] animate-pulse" />
+          <div key={i} className="h-16 bg-[#E6ECF4] rounded-[4px] animate-pulse" />
         ))}
       </div>
     )
@@ -153,16 +156,16 @@ function FeesTab({ invoices, isLoading, term }) {
   return (
     <div className="max-w-[720px] space-y-5">
       {/* Summary card */}
-      <div className="bg-white border border-[#DCD5C7] rounded-[6px] px-6 py-5">
+      <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.07em] text-[#8A98A3] mb-1">
+            <p className="text-[11px] uppercase tracking-[0.07em] text-[#697A91] mb-1">
               {term?.name ?? "Current term"}
             </p>
-            <div className="font-serif text-[32px] font-medium text-[#1C2630]">
+            <div className="font-serif text-[32px] font-medium text-[#172B4D]">
               ₦{total.toLocaleString()}
             </div>
-            <p className="text-[12.5px] text-[#5C7080] mt-1">
+            <p className="text-[12.5px] text-[#53657E] mt-1">
               {invoiceList.length} fee line{invoiceList.length !== 1 ? "s" : ""}
             </p>
           </div>
@@ -180,16 +183,16 @@ function FeesTab({ invoices, isLoading, term }) {
 
       {/* Invoice line items */}
       {invoiceList.length === 0 ? (
-        <div className="bg-white border border-[#DCD5C7] rounded-[6px] px-6 py-12 text-center">
-          <p className="text-[13px] text-[#8A98A3]">No invoices found for this term.</p>
+        <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-12 text-center">
+          <p className="text-[13px] text-[#697A91]">No invoices found for this term.</p>
         </div>
       ) : (
-        <div className="bg-white border border-[#DCD5C7] rounded-[6px] overflow-hidden">
+        <div className="bg-white border border-[#DFE6EF] rounded-[6px] overflow-hidden">
           <table className="w-full border-collapse">
             <thead>
               <tr>
                 {["Fee", "Amount", "Status", "Paid on"].map((h) => (
-                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium px-6 py-3 border-b border-[#DCD5C7]">
+                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium px-6 py-3 border-b border-[#DFE6EF]">
                     {h}
                   </th>
                 ))}
@@ -198,13 +201,13 @@ function FeesTab({ invoices, isLoading, term }) {
             <tbody>
               {invoiceList.map((inv) => (
                 <tr key={inv.id}>
-                  <td className="px-6 py-4 border-b border-[#DCD5C7] text-[13.5px] font-medium">
+                  <td className="px-6 py-4 border-b border-[#DFE6EF] text-[13.5px] font-medium">
                     {inv.fee_type_name ?? "—"}
                   </td>
-                  <td className="px-6 py-4 border-b border-[#DCD5C7] font-mono text-[12.5px] text-[#5C7080]">
+                  <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12.5px] text-[#53657E]">
                     ₦{Number(inv.amount ?? 0).toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 border-b border-[#DCD5C7]">
+                  <td className="px-6 py-4 border-b border-[#DFE6EF]">
                     <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 capitalize ${
                       inv.status === "paid"
                         ? "bg-[#EAEFE6] text-[#5E7A5E]"
@@ -215,16 +218,16 @@ function FeesTab({ invoices, isLoading, term }) {
                       {inv.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 border-b border-[#DCD5C7] font-mono text-[12px] text-[#8A98A3]">
+                  <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12px] text-[#697A91]">
                     {inv.paid_at ? formatDate(inv.paid_at) : "—"}
                   </td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
-              <tr className="bg-[#FAF8F4]">
-                <td className="px-6 py-3 text-[12px] font-medium text-[#5C7080] uppercase tracking-[0.05em]">Total</td>
-                <td className="px-6 py-3 font-mono text-[13px] font-medium text-[#1C2630]">
+              <tr className="bg-[#F4F7FB]">
+                <td className="px-6 py-3 text-[12px] font-medium text-[#53657E] uppercase tracking-[0.05em]">Total</td>
+                <td className="px-6 py-3 font-mono text-[13px] font-medium text-[#172B4D]">
                   ₦{total.toLocaleString()}
                 </td>
                 <td colSpan={2} />
@@ -245,7 +248,7 @@ function ResultsTab({ results, isLoading, isError, term }) {
     return (
       <div className="space-y-3 max-w-[720px]">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-12 bg-[#E8E3DA] rounded-[4px] animate-pulse" />
+          <div key={i} className="h-12 bg-[#E6ECF4] rounded-[4px] animate-pulse" />
         ))}
       </div>
     )
@@ -253,9 +256,9 @@ function ResultsTab({ results, isLoading, isError, term }) {
 
   if (isError || !results) {
     return (
-      <div className="bg-white border border-[#DCD5C7] rounded-[6px] px-6 py-12 text-center max-w-[720px]">
+      <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-12 text-center max-w-[720px]">
         <h3 className="font-serif text-[18px] font-medium mb-1">No results yet</h3>
-        <p className="text-[13px] text-[#5C7080]">
+        <p className="text-[13px] text-[#53657E]">
           Results for {term?.name ?? "this term"} haven't been published yet.
           Check back after your school administrator approves them.
         </p>
@@ -265,12 +268,12 @@ function ResultsTab({ results, isLoading, isError, term }) {
 
   return (
     <div className="max-w-[720px] space-y-5">
-      <div className="bg-white border border-[#DCD5C7] rounded-[6px] overflow-hidden">
+      <div className="bg-white border border-[#DFE6EF] rounded-[6px] overflow-hidden">
         <table className="w-full border-collapse">
           <thead>
             <tr>
               {["Subject", "CA1", "CA2", "Exam", "Total", "Grade"].map((h) => (
-                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#5C7080] font-medium px-6 py-3 border-b border-[#DCD5C7]">
+                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium px-6 py-3 border-b border-[#DFE6EF]">
                   {h}
                 </th>
               ))}
@@ -279,12 +282,12 @@ function ResultsTab({ results, isLoading, isError, term }) {
           <tbody>
             {resultList.map((r, i) => (
               <tr key={r.id ?? i}>
-                <td className="px-6 py-4 border-b border-[#DCD5C7] text-[13.5px] font-medium">{r.subject_name ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DCD5C7] font-mono text-[12.5px] text-[#5C7080]">{r.ca1_score ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DCD5C7] font-mono text-[12.5px] text-[#5C7080]">{r.ca2_score ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DCD5C7] font-mono text-[12.5px] text-[#5C7080]">{r.exam_score ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DCD5C7] font-mono text-[13px] font-medium text-[#1C2630]">{r.total_score ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DCD5C7] font-mono text-[13px] text-[#9C7A3C] font-medium">{r.grade ?? "—"}</td>
+                <td className="px-6 py-4 border-b border-[#DFE6EF] text-[13.5px] font-medium">{r.subject_name ?? "—"}</td>
+                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12.5px] text-[#53657E]">{r.ca1_score ?? "—"}</td>
+                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12.5px] text-[#53657E]">{r.ca2_score ?? "—"}</td>
+                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12.5px] text-[#53657E]">{r.exam_score ?? "—"}</td>
+                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[13px] font-medium text-[#172B4D]">{r.total_score ?? "—"}</td>
+                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[13px] text-[#2563EB] font-medium">{r.grade ?? "—"}</td>
               </tr>
             ))}
           </tbody>
@@ -298,8 +301,8 @@ function ResultsTab({ results, isLoading, isError, term }) {
 function Row({ label, value, mono, capitalize }) {
   return (
     <div className="flex justify-between items-baseline text-[13px] border-b border-[#F0EBE3] pb-3 last:border-0 last:pb-0">
-      <span className="text-[#8A98A3] shrink-0">{label}</span>
-      <span className={`text-right ${mono ? "font-mono text-[12.5px] text-[#5C7080]" : "text-[#1C2630] font-medium"} ${capitalize ? "capitalize" : ""}`}>
+      <span className="text-[#697A91] shrink-0">{label}</span>
+      <span className={`text-right ${mono ? "font-mono text-[12.5px] text-[#53657E]" : "text-[#172B4D] font-medium"} ${capitalize ? "capitalize" : ""}`}>
         {value ?? "—"}
       </span>
     </div>

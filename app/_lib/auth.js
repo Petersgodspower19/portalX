@@ -72,6 +72,9 @@ export const login = async (identifier, password) => {
     });
     return response.data;
   } catch (error) {
+    console.log(error)
+    console.log(error.response?.status);
+    console.log(error.response?.data?.detail);
     throw new Error(error.response?.data?.detail || "Something went wrong");
   }
 };
