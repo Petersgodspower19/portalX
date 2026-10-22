@@ -1,13 +1,17 @@
 "use client";
 import { useState } from "react";
 import { LuUsers, LuBookOpen, LuSearch } from "react-icons/lu";
-import { useGetTeachersClass, useGetTerm, useStudents, useAssignedSubjects } from "@/app/_lib/hooks";
+import { useGetTeachersClass, useGetTerm, useStudents, useAssignedSubjects, usePendingClassStudents, useClassRegistrationCode } from "@/app/_lib/hooks";
 import ProtectedRoute from "@/app/_lib/ProtectedRoutes";
 import Link from "next/link";
 import { CiUser } from "react-icons/ci";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { generateClassCode } from "@/app/_lib/classes";
+import PendingStudents from "./PendingStudents";
 
 const TABS = [
   { key: "students", label: "Students" },
+  { key: "pending", label: "Pending students" },
   { key: "subjects", label: "Subjects" },
 ];
 
@@ -20,6 +24,7 @@ function MyClassContent() {
 
   const classId = myClass?.id;
   const termId = term?.id;
+  const pendingStudents = usePendingClassStudents(classId);
 
   const { data: students = [], isLoading: studentsLoading } = useStudents({
     class_id: classId,
@@ -41,7 +46,7 @@ function MyClassContent() {
       <div className="bg-[#F3E7E3] border border-[#DFE6EF] rounded-[6px] px-6 py-5 max-w-[480px]">
         <p className="text-[13.5px] text-[#8B4A3D] font-medium">No class assigned</p>
         <p className="text-[12.5px] text-[#8B4A3D] mt-1">
-          You haven't been assigned as a form teacher to any class yet. Contact the principal.
+          You haven&apos;t been assigned as a form teacher to any class yet. Contact the principal.
         </p>
       </div>
     );
@@ -73,6 +78,7 @@ function MyClassContent() {
             <StatChip icon={LuBookOpen} value={subjects.length} label="Subjects" />
           </div>
         </div>
+        <ClassRegistrationCode key={classId} classId={classId} />
       </div>
 
       {/* ── Tabs ── */}
@@ -88,9 +94,12 @@ function MyClassContent() {
             }`}
           >
             {t.label}
+            {t.key === "pending" && Array.isArray(pendingStudents.data) && <span className="ml-2 bg-[#EDF3FF] text-[#2563EB] rounded px-1.5 py-0.5 text-[10px]">{pendingStudents.data.length}</span>}
           </button>
         ))}
       </div>
+
+      {tab === "pending" && <PendingStudents classId={classId} query={pendingStudents} />}
 
       {/* ── Students tab ── */}
       {tab === "students" && (
@@ -204,6 +213,44 @@ function MyClassContent() {
       )}
     </div>
   );
+}
+
+function ClassRegistrationCode({ classId }) {
+  const queryClient = useQueryClient();
+  const queryKey = ["class-registration-code", classId];
+  const codeQuery = useClassRegistrationCode(classId);
+  const createCode = useMutation({
+    mutationFn: () => generateClassCode(classId),
+    onSuccess: async (response) => {
+      queryClient.setQueryData(queryKey, response);
+      await queryClient.invalidateQueries({ queryKey });
+    },
+    onError: () => queryClient.invalidateQueries({ queryKey }),
+  });
+  const registration = codeQuery.data;
+  const hasCode = !!registration?.code && registration.is_active !== false;
+
+  return <section className="border-t border-[#DFE6EF] mt-5 pt-5">
+    <h2 className="text-[13px] font-medium text-[#172B4D]">Class registration code</h2>
+    <p className="text-[12px] text-[#697A91] mt-1 mb-3">Share this code with students so they can register for your class.</p>
+    {codeQuery.isPending || codeQuery.isFetching ? <p role="status" className="text-[12px] text-[#697A91]">Checking class code...</p> : codeQuery.isError ?
+      <div role="alert" className="text-[12px] text-[#8B4A3D]">
+        <p>{codeQuery.error.message}</p>
+        <button type="button" onClick={() => codeQuery.refetch()} className="text-[#2563EB] mt-2">Try again</button>
+      </div> : hasCode ?
+      <div role="status">
+        <p className="inline-block font-mono text-[19px] font-semibold tracking-[0.12em] text-[#2563EB] bg-[#EDF3FF] border border-[#DCE7FA] rounded-lg px-4 py-2.5">{registration.code}</p>
+        <p className="text-[12px] text-[#53657E] mt-3">Times used: <strong className="text-[#172B4D]">{registration.uses_count ?? 0}</strong></p>
+        {registration.expires_at && <p className="text-[11px] text-[#697A91] mt-2">Expires {new Date(registration.expires_at).toLocaleString("en-GB", { timeZone: "Africa/Lagos", dateStyle: "medium", timeStyle: "short" })}</p>}
+      </div> :
+      <div>
+        <p className="text-[12px] text-[#697A91] mb-3">No active registration code for this class.</p>
+        <button type="button" disabled={createCode.isPending} onClick={() => createCode.mutate()} className="bg-[#2563EB] text-white text-[12px] font-medium rounded-lg px-4 py-2.5 disabled:opacity-60">
+          {createCode.isPending ? "Creating code..." : "Create class code"}
+        </button>
+      </div>}
+    {createCode.isError && <p role="alert" className="text-[12px] text-[#8B4A3D] mt-3">{createCode.error.message}</p>}
+  </section>;
 }
 
 function StatChip({ icon: Icon, value, label }) {

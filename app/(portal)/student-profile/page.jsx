@@ -1,323 +1,63 @@
-'use client'
-import { useState } from 'react'
-import { useAuth } from '@/app/_lib/AuthContext'
-import ProtectedRoute from '@/app/_lib/ProtectedRoutes'
-import { useLoggedInStudent, useGetTerm, useStudentResults, useStudentInvoice } from '@/app/_lib/hooks'
+"use client";
+
+import { useState } from "react";
+import { LuUserRound, LuChartNoAxesColumn, LuCreditCard, LuGraduationCap } from "react-icons/lu";
+import ProtectedRoute from "@/app/_lib/ProtectedRoutes";
+import { useLoggedInStudent, useGetTerm, useStudentResults, useStudentInvoice } from "@/app/_lib/hooks";
+import { styles, ProfileHeader, Overview, Panel, Metrics, InvoiceTable, State, money } from "@/app/_components/student-record/ProfileUI";
+
+const tabs = [{ key: "profile", label: "Profile overview", icon: LuUserRound }, { key: "results", label: "Academic results", icon: LuChartNoAxesColumn }, { key: "fees", label: "Fees and payments", icon: LuCreditCard }];
 
 function StudentContent() {
-  const { user } = useAuth()
-  const { data: student, isLoading } = useLoggedInStudent()
-  const { data: term } = useGetTerm()
-  const { data: invoices = [], isLoading: invoicesLoading } = useStudentInvoice(term?.id)
- const { data: results, isLoading: resultsLoading, isError: resultsError } = useStudentResults(term?.id)
-  const [tab, setTab] = useState("profile")
-
-  const initials = `${student?.first_name?.[0] ?? ""}${student?.last_name?.[0] ?? ""}`.toUpperCase()
-
-  return (
-    <section className="student-portal">
-      <div className="portal-profile-heading flex justify-between items-end mb-1.5">
-        <div>
-          <p className="profile-eyebrow">Your school, at a glance</p>
-          <h1 className="font-serif text-[27px] font-medium">My Portal</h1>
-          <p className="text-[12.5px] text-[#53657E] mt-1">
-            {student?.class_info?.full_name ?? "—"}
-          </p>
-        </div>
-        <div className="flex items-center gap-2.5 border border-[#DFE6EF] rounded-[4px] px-3 py-2 bg-white">
-          <div className="bg-[#2563EB] h-7 w-7 rounded-full flex items-center justify-center text-[#172B4D] text-[11px] font-semibold shrink-0">
-            {initials}
-          </div>
-          <div className="text-right">
-            <p className="text-[13px] font-medium text-[#172B4D]">
-              {student?.full_name ?? `${user?.first_name ?? ""} ${user?.last_name ?? ""}`}
-            </p>
-            <p className="font-mono text-[11px] text-[#53657E]">{student?.reg_number ?? "—"}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="profile-tabs border-b border-[#DFE6EF] mt-5 mb-6 flex gap-1" role="group" aria-label="Portal sections">
-        {[
-          { key: "profile", label: "Profile" },
-          { key: "results", label: "Results" },
-          { key: "fees", label: "Fees" },
-        ].map((t) => (
-          <button
-            key={t.key}
-            aria-pressed={tab === t.key}
-            onClick={() => setTab(t.key)}
-            className={`text-[13px] font-medium px-3.5 py-2.5 border-b-2 -mb-px ${
-              tab === t.key ? "border-[#2563EB] text-[#172B4D]" : "border-transparent text-[#697A91]"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {tab === "profile" && <ProfileTab student={student} isLoading={isLoading} />}
-      {tab === "results" && (
-  <ResultsTab results={results} isLoading={resultsLoading} isError={resultsError} term={term} />
-)}
-      {tab === "fees" && <FeesTab invoices={invoices} isLoading={invoicesLoading} term={term} />}
-    </section>
-  )
+  const student = useLoggedInStudent();
+  const termQuery = useGetTerm();
+  const term = termQuery.data;
+  const results = useStudentResults(term?.id);
+  const invoices = useStudentInvoice(term?.id);
+  const [tab, setTab] = useState("profile");
+  return <section className={styles.page}>
+    <div className={styles.topline}><div className={styles.breadcrumb}><span>Student workspace</span><span>/</span><span>My profile</span></div><span className={styles.recordLabel}>Your school record</span></div>
+    {student.isPending ? <State title="Loading your profile" description="Getting your school record ready." loading /> : student.isError || !student.data ? <State title="Your profile could not be loaded" description={student.error?.message || "Please try again to load your student record."} error onRetry={student.refetch} /> : <>
+      <ProfileHeader student={student.data} term={term} title="My student profile" />
+      <nav className={styles.tabs} aria-label="Student profile views">{tabs.map(({ key, label, icon: Icon }) => <button key={key} aria-pressed={tab === key} onClick={() => setTab(key)}><Icon size={15} />{label}</button>)}</nav>
+      {tab === "profile" && <Overview student={student.data} />}
+      {tab !== "profile" && (termQuery.isPending ? <State title="Loading the current term" loading /> : termQuery.isError ? <State title="Term information unavailable" description={termQuery.error.message} error onRetry={termQuery.refetch} /> : !term ? <State title="No current term" description="Your results and fees will appear when the school sets a current term." /> : tab === "results" ? <ResultsView query={results} term={term} /> : <FeesView query={invoices} term={term} />)}
+      <p className={styles.footnote}>This information is provided by your school. Contact the school administrator if you need help with your record, results or payments.</p>
+    </>}
+  </section>;
 }
 
-/* ── Profile tab ──────────────────────────────────────────────── */
-function ProfileTab({ student, isLoading }) {
-  if (isLoading) {
-    return (
-      <div className="space-y-3">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="h-14 bg-[#E6ECF4] rounded-[4px] animate-pulse" />
-        ))}
-      </div>
-    )
-  }
-
-  return (
-    <div className="personal-profile space-y-5">
-      <div className="profile-hero bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5">
-        <div className="flex items-center gap-5">
-          <div className="profile-avatar w-14 h-14 rounded-full bg-[#2563EB] text-[#172B4D] flex items-center justify-center font-serif font-semibold text-[20px] shrink-0">
-            {`${student?.first_name?.[0] ?? ""}${student?.last_name?.[0] ?? ""}`.toUpperCase()}
-          </div>
-          <div>
-            <p className="profile-eyebrow">Student profile</p>
-            <h2 className="font-serif text-[22px] font-medium leading-tight">{student?.full_name ?? "—"}</h2>
-            <div className="flex items-center gap-3 mt-1 flex-wrap">
-              <span className="font-mono text-[12.5px] text-[#53657E]">{student?.reg_number ?? "—"}</span>
-              <span className="text-[#DFE6EF]">·</span>
-              <span className="text-[12.5px] text-[#53657E]">{student?.class_info?.full_name ?? "—"}</span>
-              <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 ${
-                student?.is_active ? "bg-[#EAEFE6] text-[#5E7A5E]" : "bg-[#F3E7E3] text-[#8B4A3D]"
-              }`}>
-                {student?.is_active ? "Active" : "Inactive"}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-5">
-        <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5">
-          <p className="text-[11px] uppercase tracking-[0.07em] text-[#697A91] mb-4">Personal details</p>
-          <div className="space-y-4">
-            <Row label="First name" value={student?.first_name} />
-            <Row label="Last name" value={student?.last_name} />
-            <Row label="Gender" value={student?.gender} capitalize />
-            <Row label="Date of birth" value={formatDate(student?.date_of_birth)} mono />
-          </div>
-        </div>
-
-        <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5">
-          <p className="text-[11px] uppercase tracking-[0.07em] text-[#697A91] mb-4">Class</p>
-          <div className="space-y-4">
-            <Row label="Class" value={student?.class_info?.name} />
-            <Row label="Arm" value={student?.class_info?.arm} />
-            <Row label="Level" value={student?.class_info?.level} />
-            <Row label="Full name" value={student?.class_info?.full_name} />
-          </div>
-        </div>
-
-        <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5 col-span-2">
-          <p className="text-[11px] uppercase tracking-[0.07em] text-[#697A91] mb-4">Guardian details</p>
-          <div className="grid grid-cols-3 gap-6">
-            <Row label="Name" value={student?.guardian_name} />
-            <Row label="Phone" value={student?.guardian_phone} mono />
-            <Row label="Email" value={student?.guardian_email} mono />
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+function ResultsView({ query, term }) {
+  if (query.isPending) return <State title="Loading academic results" description={`Getting results for ${term.name}.`} loading />;
+  if (query.isError) return <State title="Results are currently unavailable" description={query.error.message} error onRetry={query.refetch} />;
+  const rows = Array.isArray(query.data) ? query.data : query.data?.subjects ?? query.data?.results;
+  if (!Array.isArray(rows)) return <State title="Results are not available yet" description={`Your school has not provided results for ${term.name}. Contact your school if you need help.`} />;
+  if (!rows.length) return <State title="No published results" description={`No subject results have been published for ${term.name} yet.`} />;
+  const allScores = rows.every((row) => row.total_score != null && Number.isFinite(Number(row.total_score)));
+  const average = allScores ? (rows.reduce((sum, row) => sum + Number(row.total_score), 0) / rows.length).toLocaleString("en-NG", { maximumFractionDigits: 1 }) : "Not available";
+  return <>
+    <div className={styles.contentHeading}><div><h2>Academic results</h2><p>Your published subject scores for {term.name}.</p></div></div>
+    <Metrics items={[{ label: "Subjects", value: rows.length }, { label: "Average score", value: average, detail: "Across the subjects shown below" }, { label: "Term", value: <span style={{ fontSize: 17 }}>{term.name}</span> }]} />
+    <Panel title="Subject performance" description="Continuous assessment and examination scores" icon={LuGraduationCap}><div className={styles.tableWrap}><table><thead><tr>{["Subject", "CA 1", "CA 2", "Exam", "Total", "Grade"].map((heading) => <th key={heading}>{heading}</th>)}</tr></thead><tbody>{rows.map((row, index) => <tr key={row.id || row.subject_id || index}><td><strong>{row.subject_name || "Subject"}</strong></td><td className={styles.numeric}>{row.ca1_score ?? "-"}</td><td className={styles.numeric}>{row.ca2_score ?? "-"}</td><td className={styles.numeric}>{row.exam_score ?? "-"}</td><td className={styles.numeric}><strong>{row.total_score ?? "-"}</strong></td><td><span className={styles.grade}>{row.grade || "-"}</span></td></tr>)}</tbody></table></div></Panel>
+  </>;
 }
 
-/* ── Fees tab ─────────────────────────────────────────────────── */
-function FeesTab({ invoices, isLoading, term }) {
-  const invoiceList = Array.isArray(invoices) ? invoices : invoices ? [invoices] : []
-
-  const total = invoiceList.reduce((sum, i) => sum + (i.amount ?? 0), 0)
-  const allPaid = invoiceList.length > 0 && invoiceList.every((i) => i.status === "paid")
-  const anyUnpaid = invoiceList.some((i) => i.status === "unpaid")
-
-  if (isLoading) {
-    return (
-      <div className="space-y-3 max-w-[720px]">
-        {[1, 2].map((i) => (
-          <div key={i} className="h-16 bg-[#E6ECF4] rounded-[4px] animate-pulse" />
-        ))}
-      </div>
-    )
-  }
-
-  return (
-    <div className="max-w-[720px] space-y-5">
-      {/* Summary card */}
-      <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-5">
-        <div className="flex justify-between items-start">
-          <div>
-            <p className="text-[11px] uppercase tracking-[0.07em] text-[#697A91] mb-1">
-              {term?.name ?? "Current term"}
-            </p>
-            <div className="font-serif text-[32px] font-medium text-[#172B4D]">
-              ₦{total.toLocaleString()}
-            </div>
-            <p className="text-[12.5px] text-[#53657E] mt-1">
-              {invoiceList.length} fee line{invoiceList.length !== 1 ? "s" : ""}
-            </p>
-          </div>
-          <span className={`text-[12px] font-medium rounded-[4px] px-3 py-1.5 mt-1 ${
-            allPaid
-              ? "bg-[#EAEFE6] text-[#5E7A5E]"
-              : anyUnpaid
-              ? "bg-[#F3E7E3] text-[#8B4A3D]"
-              : "bg-[#FAEEDA] text-[#854F0B]"
-          }`}>
-            {allPaid ? "Fully paid" : anyUnpaid ? "Payment outstanding" : "Overridden"}
-          </span>
-        </div>
-      </div>
-
-      {/* Invoice line items */}
-      {invoiceList.length === 0 ? (
-        <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-12 text-center">
-          <p className="text-[13px] text-[#697A91]">No invoices found for this term.</p>
-        </div>
-      ) : (
-        <div className="bg-white border border-[#DFE6EF] rounded-[6px] overflow-hidden">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr>
-                {["Fee", "Amount", "Status", "Paid on"].map((h) => (
-                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium px-6 py-3 border-b border-[#DFE6EF]">
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {invoiceList.map((inv) => (
-                <tr key={inv.id}>
-                  <td className="px-6 py-4 border-b border-[#DFE6EF] text-[13.5px] font-medium">
-                    {inv.fee_type_name ?? "—"}
-                  </td>
-                  <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12.5px] text-[#53657E]">
-                    ₦{Number(inv.amount ?? 0).toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 border-b border-[#DFE6EF]">
-                    <span className={`inline-block text-[11px] font-medium rounded-[3px] px-2 py-0.5 capitalize ${
-                      inv.status === "paid"
-                        ? "bg-[#EAEFE6] text-[#5E7A5E]"
-                        : inv.status === "unpaid"
-                        ? "bg-[#F3E7E3] text-[#8B4A3D]"
-                        : "bg-[#FAEEDA] text-[#854F0B]"
-                    }`}>
-                      {inv.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12px] text-[#697A91]">
-                    {inv.paid_at ? formatDate(inv.paid_at) : "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="bg-[#F4F7FB]">
-                <td className="px-6 py-3 text-[12px] font-medium text-[#53657E] uppercase tracking-[0.05em]">Total</td>
-                <td className="px-6 py-3 font-mono text-[13px] font-medium text-[#172B4D]">
-                  ₦{total.toLocaleString()}
-                </td>
-                <td colSpan={2} />
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      )}
-    </div>
-  )
-}
-
-/* ── Results tab ──────────────────────────────────────────────── */
-function ResultsTab({ results, isLoading, isError, term }) {
-  const resultList = results?.subjects ?? [];
-
-  if (isLoading) {
-    return (
-      <div className="space-y-3 max-w-[720px]">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="h-12 bg-[#E6ECF4] rounded-[4px] animate-pulse" />
-        ))}
-      </div>
-    )
-  }
-
-  if (isError || !results) {
-    return (
-      <div className="bg-white border border-[#DFE6EF] rounded-[6px] px-6 py-12 text-center max-w-[720px]">
-        <h3 className="font-serif text-[18px] font-medium mb-1">No results yet</h3>
-        <p className="text-[13px] text-[#53657E]">
-          Results for {term?.name ?? "this term"} haven't been published yet.
-          Check back after your school administrator approves them.
-        </p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="max-w-[720px] space-y-5">
-      <div className="bg-white border border-[#DFE6EF] rounded-[6px] overflow-hidden">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              {["Subject", "CA1", "CA2", "Exam", "Total", "Grade"].map((h) => (
-                <th key={h} className="text-left text-[11px] uppercase tracking-[0.06em] text-[#53657E] font-medium px-6 py-3 border-b border-[#DFE6EF]">
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {resultList.map((r, i) => (
-              <tr key={r.id ?? i}>
-                <td className="px-6 py-4 border-b border-[#DFE6EF] text-[13.5px] font-medium">{r.subject_name ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12.5px] text-[#53657E]">{r.ca1_score ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12.5px] text-[#53657E]">{r.ca2_score ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[12.5px] text-[#53657E]">{r.exam_score ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[13px] font-medium text-[#172B4D]">{r.total_score ?? "—"}</td>
-                <td className="px-6 py-4 border-b border-[#DFE6EF] font-mono text-[13px] text-[#2563EB] font-medium">{r.grade ?? "—"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  )
-}
-
-/* ── Shared ───────────────────────────────────────────────────── */
-function Row({ label, value, mono, capitalize }) {
-  return (
-    <div className="flex justify-between items-baseline text-[13px] border-b border-[#F0EBE3] pb-3 last:border-0 last:pb-0">
-      <span className="text-[#697A91] shrink-0">{label}</span>
-      <span className={`text-right ${mono ? "font-mono text-[12.5px] text-[#53657E]" : "text-[#172B4D] font-medium"} ${capitalize ? "capitalize" : ""}`}>
-        {value ?? "—"}
-      </span>
-    </div>
-  )
-}
-
-function formatDate(val) {
-  if (!val) return "—"
-  return new Date(val).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+function FeesView({ query, term }) {
+  if (query.isPending) return <State title="Loading fee information" description={`Getting your invoices for ${term.name}.`} loading />;
+  if (query.isError) return <State title="Fee information unavailable" description={query.error.message} error onRetry={query.refetch} />;
+  const invoices = Array.isArray(query.data) ? query.data : Array.isArray(query.data?.invoices) ? query.data.invoices : query.data?.id ? [query.data] : [];
+  if (!invoices.length) return <State title="No invoices for this term" description={`No fee invoices are listed for ${term.name}.`} />;
+  const total = invoices.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+  const paymentKnown = invoices.every((item) => ["paid", "unpaid"].includes(String(item.status).toLowerCase()) || item.amount_paid != null || item.paid_amount != null);
+  const paid = paymentKnown ? invoices.reduce((sum, item) => sum + Number(item.amount_paid ?? item.paid_amount ?? (String(item.status).toLowerCase() === "paid" ? item.amount : 0)), 0) : null;
+  return <>
+    <div className={styles.contentHeading}><div><h2>Fees and payments</h2><p>A summary of your school invoices for {term.name}.</p></div></div>
+    <Metrics items={[{ label: "Total billed", value: money(total) }, { label: "Total paid", value: money(paid) }, { label: "Outstanding balance", value: money(paid === null ? null : total - paid) }]} />
+    <Panel title="Invoice history" description={`${invoices.length} ${invoices.length === 1 ? "invoice" : "invoices"} for this term`} icon={LuCreditCard}><InvoiceTable invoices={invoices} /></Panel>
+    {!paymentKnown && <p className={styles.footnote}>A payment total is not available for every invoice. Contact the school bursar to confirm the outstanding balance.</p>}
+  </>;
 }
 
 export default function StudentProfile() {
-  return (
-    <ProtectedRoute allowedRoles={["student"]}>
-      <StudentContent />
-    </ProtectedRoute>
-  )
+  return <ProtectedRoute allowedRoles={["student"]}><StudentContent /></ProtectedRoute>;
 }

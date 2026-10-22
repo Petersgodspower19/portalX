@@ -26,34 +26,7 @@ export const listStudents = async (class_id, active_only, search, sort_by, sort_
     }
 }
 
-export const enrollStudent = async (first_name, last_name, gender, date_of_birth, class_id, guardian_name, guardian_phone, guardian_email ) => {
-    // principal and vp only
-
-    try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        const res = await axios.post(`${backendUrl}/api/v1/students`, {
-            first_name, 
-            last_name, 
-            gender, 
-            date_of_birth, 
-            class_id, 
-            guardian_name, 
-            guardian_phone, 
-            guardian_email 
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        console.log(res.data);
-        return res.data;
-    } catch (error) {
-        throw new Error(
-            error.response?.data?.detail || "Something went wrong"
-        );
-    }
-}
+export { registerStudent as enrollStudent } from "./auth";
 
 export const bulkImport = async (file) => {
     // principal and vp only

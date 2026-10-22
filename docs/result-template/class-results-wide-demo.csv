@@ -1,0 +1,7 @@
+﻿student_id,student_name,registration_number,subject:sub-maths:ca1,subject:sub-maths:ca2,subject:sub-maths:exam,subject:sub-maths:total,subject:sub-english:ca1,subject:sub-english:ca2,subject:sub-english:exam,subject:sub-english:total,subject:sub-science:ca1,subject:sub-science:ca2,subject:sub-science:exam,subject:sub-science:total,subject:sub-social:ca1,subject:sub-social:ca2,subject:sub-social:exam,subject:sub-social:total,subject:sub-computer:ca1,subject:sub-computer:ca2,subject:sub-computer:exam,subject:sub-computer:total
+student-001,Ada Okafor,DEMO/001,12,11,35,58,13,12,37,62,14,13,39,66,15,14,41,70,16,15,43,74
+student-002,Tunde Bello,DEMO/002,13,13,38,64,14,14,40,68,15,15,42,72,16,16,44,76,17,17,46,80
+student-003,Zainab Musa,DEMO/003,14,15,41,70,15,16,43,74,16,17,45,78,17,18,47,82,18,19,49,86
+student-004,Chidi Eze,DEMO/004,15,17,44,76,0,18,46,64,17,19,48,84,18,20,50,88,19,11,52,82
+student-005,Amara Obi,DEMO/005,16,19,47,82,17,20,49,86,18,11,51,80,19,12,53,84,20,13,55,88
+student-006,David Adebayo,DEMO/006,17,11,50,78,18,12,52,82,19,13,54,86,20,14,56,90,12,15,58,85

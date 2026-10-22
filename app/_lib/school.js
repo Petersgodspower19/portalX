@@ -13,6 +13,7 @@ export const getSchoolProfile = async () => {
                 Authorization: `Bearer ${token}`
             }
         });
+        console.log(res.data);
         return res.data;
     } catch (error) {
         throw new Error(

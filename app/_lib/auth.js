@@ -4,6 +4,42 @@ const backendUrl = process.env.NEXT_PUBLIC_BACKENDURL;
 
 const api = axios.create({ baseURL: backendUrl });
 
+function registrationError(error) {
+  const detail = error.response?.data?.detail;
+  return new Error(Array.isArray(detail)
+    ? detail.map((item) => item.msg).join(", ")
+    : typeof detail === "string" ? detail : "Could not complete student registration. Please try again.");
+}
+
+export const checkUsername = async (username, signal) => {
+  try {
+    const { data } = await axios.get(`${backendUrl}/api/v1/auth/check-username`, {
+      params: { username }, signal,
+    });
+    if (typeof data === "boolean") return data;
+    for (const key of ["available", "is_available", "username_available"]) {
+      if (typeof data?.[key] === "boolean") return data[key];
+    }
+    for (const key of ["taken", "is_taken", "exists"]) {
+      if (typeof data?.[key] === "boolean") return !data[key];
+    }
+    throw new Error("Could not read username availability. Please try again.");
+  } catch (error) {
+    if (!error.response) throw error;
+    throw registrationError(error);
+  }
+};
+
+export const registerStudent = async (payload) => {
+  try {
+    const { data } = await axios.post(`${backendUrl}/api/v1/auth/student-register`, payload);
+    console.log("registerStudent response:", data);
+    return data;
+  } catch (error) {
+    throw registrationError(error);
+  }
+};
+
 // Attach the access token to every outgoing request automatically.
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");

@@ -8,12 +8,13 @@ import {
 } from "react-icons/lu";
 import { CiUser } from "react-icons/ci";
 import {
-  listStudents, enrollStudent, bulkImport,
+  listStudents, bulkImport,
   getStudent, transferStudentToAnotherClass, deactivateStudent,
 } from "../../_lib/students";
 import { useStudents, useStudent, useClasses } from "../../_lib/hooks";
 import ProtectedRoute from "../../_lib/ProtectedRoutes";
 import Link from "next/link";
+import StudentRegistrationForm from "../../_lib/StudentRegistrationForm";
 
 // ─── Main page ─────────────────────────────────────────────────────────────
 function StudentsContent() {
@@ -255,84 +256,9 @@ function StudentsContent() {
 
 // ─── Enroll modal ──────────────────────────────────────────────────────────
 function EnrollModal({ onClose, onEnrolled }) {
-  const { data: classes = [], isLoading: loadingClasses } = useClasses();
-  const [form, setForm] = useState({
-    first_name: "", last_name: "", gender: "male",
-    date_of_birth: "", class_id: "",
-    guardian_name: "", guardian_phone: "", guardian_email: "",
-  });
-  const [isSaving, setIsSaving] = useState(false);
-  const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSaving(true);
-    try {
-      const created = await enrollStudent(
-        form.first_name, form.last_name, form.gender, form.date_of_birth,
-        form.class_id, form.guardian_name, form.guardian_phone, form.guardian_email
-      );
-      onEnrolled(created);
-    } catch (err) {
-      toast.error(err.message || "Could not enroll student.");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  return (
-    <Modal title="Enroll student" onClose={onClose} wide>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-3">
-          <TF label="First name" value={form.first_name} onChange={set("first_name")} />
-          <TF label="Last name" value={form.last_name} onChange={set("last_name")} />
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="mb-4">
-            <label className="block text-[12px] text-[#53657E] mb-1.5">Gender</label>
-            <select value={form.gender} onChange={set("gender")} className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]">
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
-          <TF label="Date of birth" type="date" value={form.date_of_birth} onChange={set("date_of_birth")} />
-        </div>
-       <div className="mb-4">
-  <label className="block text-[12px] text-[#53657E] mb-1.5">
-    Class
-  </label>
-
-  <select
-    value={form.class_id}
-    onChange={set("class_id")}
-    required
-    className="w-full text-[13.5px] border border-[#DFE6EF] rounded-[4px] px-3 py-2.5 outline-none focus:border-[#2563EB]"
-  >
-    <option value="">
-      {loadingClasses ? "Loading classes..." : "Select a class"}
-    </option>
-
-    {classes.map((cls) => (
-      <option key={cls.id} value={cls.id}>
-        {cls.full_name}
-      </option>
-    ))}
-  </select>
-</div>
-
-        <p className="text-[11px] uppercase tracking-[0.07em] text-[#697A91] mb-3 mt-1">Guardian details</p>
-        <TF label="Guardian name" value={form.guardian_name} onChange={set("guardian_name")} />
-        <div className="grid grid-cols-2 gap-3">
-          <TF label="Guardian phone" value={form.guardian_phone} onChange={set("guardian_phone")} />
-          <TF label="Guardian email" type="email" value={form.guardian_email} onChange={set("guardian_email")} required={false} />
-        </div>
-
-        <button type="submit" disabled={isSaving} className="w-full mt-2 bg-[#172B4D] text-[#F4F7FB] text-[13.5px] font-medium rounded-[4px] py-2.5 disabled:opacity-60">
-          {isSaving ? "Enrolling…" : "Enroll student"}
-        </button>
-      </form>
-    </Modal>
-  );
+  return (<Modal title="Enroll student" onClose={onClose} wide>
+    <StudentRegistrationForm onRegistered={onEnrolled} submitLabel="Enroll student" />
+  </Modal>);
 }
 
 // ─── Bulk import modal ─────────────────────────────────────────────────────

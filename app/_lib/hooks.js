@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentTerm, getCurrentAcademicSession } from "./school";
 import { listStudents, getStudent, getCurrentLoggedInStudent } from "./students";
-import { getMyClass, getAssignedSubjects, listClasses } from "./classes";
+import { getMyClass, getAssignedSubjects, listClasses, getPendingStudentForClassn, viewClassCode } from "./classes";
 import { listFeeTypes, getInvoices, studentInvoice, getStudentFeesStatusForTerm } from "./fees";
 import { listAllStaff } from "./staff";
 import { getAllPendingResults, getResultsForClass, getStudentResults } from "./results";
@@ -78,6 +78,37 @@ export const useGetTeachersClass = () => {
         retry: false,
     });
 };
+
+// Keep these queries across page navigation; mutations and manual refresh still
+// invalidate them immediately when registration data changes.
+const classRegistrationCache = {
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false,
+};
+
+export const usePendingClassStudents = (class_id) => useQuery({
+    queryKey: ["pending-class-students", class_id],
+    queryFn: () => getPendingStudentForClassn(class_id),
+    enabled: !!class_id,
+    ...classRegistrationCache,
+});
+
+export const useClassRegistrationCode = (class_id) => useQuery({
+    queryKey: ["class-registration-code", class_id],
+    queryFn: async () => {
+        const response = await viewClassCode(class_id);
+        console.log("Class registration code response:", response);
+        if (response?.expires_at && new Date(response.expires_at).getTime() <= Date.now()) {
+            return { ...response, is_active: false };
+        }
+        return response;
+    },
+    enabled: !!class_id,
+    ...classRegistrationCache,
+});
 
 export const useAssignedSubjects = (class_id, term_id) => {
     return useQuery({
